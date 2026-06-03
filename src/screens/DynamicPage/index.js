@@ -2,8 +2,8 @@
 
 import { useController } from './useController';
 
-export function DynamicPageScreen({ page }) {
-  const { Template, page: preparedPage } = useController(page);
+export function DynamicPageScreen({ pageData }) {
+  const { Template, page } = useController(pageData);
 
-  return <Template page={preparedPage} />;
+  return <Template page={page} />;
 }

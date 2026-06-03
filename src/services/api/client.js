@@ -1,9 +1,31 @@
 import { env } from '@/config/env';
 
 export const apiClient = {
-  baseUrl: env.apiBaseUrl,
+  baseUrl: env.apiUrl,
 
   getBaseUrl() {
     return this.baseUrl;
+  },
+
+  async get(path, options = {}) {
+    const response = await fetch(`${this.baseUrl}${path}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+      next: {
+        revalidate: options.revalidate ?? 3600,
+      },
+    });
+
+    if (response.status === 404) {
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    return response.json();
   },
 };
