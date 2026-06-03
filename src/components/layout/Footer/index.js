@@ -4,13 +4,14 @@ import { useController } from './useController';
 import * as S from './styles';
 
 export function Footer() {
-  const { siteName, categoryItems, institutionalLinks, affiliateNotice } = useController();
+  const { siteName, slogan, categoryItems, institutionalLinks, affiliateNotice } = useController();
 
   return (
     <S.Footer>
       <S.Inner>
         <S.BrandGroup>
           <S.Brand>{siteName}</S.Brand>
+          <S.Slogan>{slogan}</S.Slogan>
           <S.Notice>{affiliateNotice}</S.Notice>
         </S.BrandGroup>
 

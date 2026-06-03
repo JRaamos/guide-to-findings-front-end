@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 
 import { DynamicPageScreen } from '@/screens/DynamicPage';
 import { getPageBySlugs } from '@/services/pages';
-import { buildPageMetadata } from '@/utils/seo';
+import { buildPageMetadata, normalizeBrandPayload } from '@/utils/seo';
 
 export const revalidate = 3600;
 
@@ -12,7 +12,9 @@ async function getRouteParams(params) {
 
 async function getPage(params) {
   const { categorySlug, contentSlug } = await getRouteParams(params);
-  return getPageBySlugs(categorySlug, contentSlug);
+  const pageData = await getPageBySlugs(categorySlug, contentSlug);
+
+  return normalizeBrandPayload(pageData);
 }
 
 export async function generateMetadata({ params }) {

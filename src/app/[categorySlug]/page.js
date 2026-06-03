@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 
 import { CategoryScreen } from '@/screens/Category';
 import { getCategoryBySlug } from '@/services/categories';
-import { buildCategoryMetadata } from '@/utils/seo';
+import { buildCategoryMetadata, normalizeBrandPayload } from '@/utils/seo';
 
 export const revalidate = 3600;
 
@@ -12,8 +12,9 @@ async function getRouteParams(params) {
 
 async function getCategory(params) {
   const { categorySlug } = await getRouteParams(params);
+  const categoryData = await getCategoryBySlug(categorySlug);
 
-  return getCategoryBySlug(categorySlug);
+  return normalizeBrandPayload(categoryData);
 }
 
 export async function generateMetadata({ params }) {

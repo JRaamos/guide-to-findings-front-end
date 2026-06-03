@@ -1,6 +1,6 @@
 import { categoryPlaceholders } from '@/constants/categories';
 import { routes } from '@/config/routes';
-import { siteConfig } from '@/config/site';
+import { BRAND } from '@/constants/brand';
 
 export function useController() {
   const navigationItems = [
@@ -9,7 +9,7 @@ export function useController() {
   ];
 
   return {
-    siteName: siteConfig.name,
+    siteName: BRAND.name,
     navigationItems,
     categoryItems: categoryPlaceholders,
   };

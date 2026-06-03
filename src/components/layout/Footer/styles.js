@@ -26,10 +26,17 @@ export const BrandGroup = styled.div`
 `;
 
 export const Brand = styled.p`
-  margin: 0 0 ${({ theme }) => theme.spacing.sm};
+  margin: 0 0 ${({ theme }) => theme.spacing.xs};
   color: ${({ theme }) => theme.colors.white};
   font-size: ${({ theme }) => theme.fontSizes.lg};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
+`;
+
+export const Slogan = styled.p`
+  margin: 0 0 ${({ theme }) => theme.spacing.sm};
+  color: ${({ theme }) => theme.colors.white};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
 `;
 
 export const Notice = styled.p`
