@@ -37,3 +37,28 @@ export function buildPageMetadata(pageData) {
     },
   };
 }
+
+export function buildCategoryMetadata(categoryData) {
+  const seo = categoryData?.seo || {};
+  const title = seo.metaTitle || categoryData?.name || siteConfig.name;
+  const description = seo.metaDescription || categoryData?.description || siteConfig.description;
+  const robots = robotsByValue[seo.robots] || defaultSeo.robots;
+
+  return {
+    title,
+    description,
+    robots,
+    alternates: seo.canonicalUrl
+      ? {
+          canonical: seo.canonicalUrl,
+        }
+      : undefined,
+    openGraph: {
+      title,
+      description,
+      images: categoryData?.featuredImage?.url
+        ? [{ url: categoryData.featuredImage.url, alt: categoryData.featuredImage.alt || title }]
+        : [],
+    },
+  };
+}

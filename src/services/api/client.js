@@ -28,4 +28,22 @@ export const apiClient = {
 
     return response.json();
   },
+
+  async post(path, payload = {}, options = {}) {
+    const response = await fetch(`${this.baseUrl}${path}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+      keepalive: options.keepalive ?? false,
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    return response.json();
+  },
 };

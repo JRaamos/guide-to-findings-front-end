@@ -50,7 +50,7 @@ export function RankingTemplate({ page }) {
           {rankingItems.length > 0 ? (
             <S.RankingList>
               {rankingItems.map((item) => (
-                <ProductRankingCard key={item.id || item.position} item={item} />
+                <ProductRankingCard key={item.id || item.position} item={item} page={page} />
               ))}
             </S.RankingList>
           ) : (

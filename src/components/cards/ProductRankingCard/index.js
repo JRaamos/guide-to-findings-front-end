@@ -3,7 +3,7 @@
 import { useController } from './useController';
 import * as S from './styles';
 
-export function ProductRankingCard({ item }) {
+export function ProductRankingCard({ item, page }) {
   const {
     position,
     title,
@@ -19,7 +19,8 @@ export function ProductRankingCard({ item }) {
     ctaText,
     affiliateUrl,
     hasAffiliateUrl,
-  } = useController(item);
+    handleCtaClick,
+  } = useController(item, page);
 
   return (
     <S.Card>
@@ -69,7 +70,12 @@ export function ProductRankingCard({ item }) {
 
       <S.ActionArea>
         {hasAffiliateUrl ? (
-          <S.Cta href={affiliateUrl} target="_blank" rel="nofollow sponsored noopener noreferrer">
+          <S.Cta
+            href={affiliateUrl}
+            target="_blank"
+            rel="nofollow sponsored noopener noreferrer"
+            onClick={handleCtaClick}
+          >
             {ctaText}
           </S.Cta>
         ) : (
