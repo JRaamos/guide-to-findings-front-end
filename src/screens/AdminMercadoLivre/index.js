@@ -3,6 +3,7 @@
 import { useController } from './useController';
 import * as S from './styles';
 
+// LEGACY: Tela temporaria. A ferramenta Mercado Livre sera migrada para o Strapi Admin.
 export function AdminMercadoLivreScreen() {
   const {
     query,
