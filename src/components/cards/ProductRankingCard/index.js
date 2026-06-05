@@ -7,12 +7,16 @@ export function ProductRankingCard({ item, page }) {
   const {
     position,
     title,
+    brand,
+    availability,
     summary,
     imageUrl,
     imageAlt,
     price,
     oldPrice,
     rating,
+    reviewCount,
+    hasMeta,
     pros,
     cons,
     highlight,
@@ -37,13 +41,22 @@ export function ProductRankingCard({ item, page }) {
       <S.Content>
         {highlight ? <S.Highlight>{highlight}</S.Highlight> : null}
         <S.Title>{title}</S.Title>
+        {brand ? <S.Brand>{brand}</S.Brand> : null}
         {summary ? <S.Summary>{summary}</S.Summary> : null}
 
-        <S.MetaList>
-          {price ? <S.MetaItem>{price}</S.MetaItem> : null}
-          {oldPrice ? <S.OldPrice>{oldPrice}</S.OldPrice> : null}
-          {rating ? <S.MetaItem>Nota {rating}</S.MetaItem> : null}
-        </S.MetaList>
+        {hasMeta ? (
+          <S.MetaList>
+            {price ? <S.MetaItem>{price}</S.MetaItem> : null}
+            {oldPrice ? <S.OldPrice>{oldPrice}</S.OldPrice> : null}
+            {rating ? (
+              <S.MetaItem>
+                Nota {rating}
+                {reviewCount ? ` (${reviewCount} avaliações)` : ''}
+              </S.MetaItem>
+            ) : null}
+            {availability ? <S.Availability>{availability}</S.Availability> : null}
+          </S.MetaList>
+        ) : null}
 
         {pros.length > 0 ? (
           <S.ListGroup>

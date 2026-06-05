@@ -11,6 +11,15 @@ export function useController(item, page) {
   const price = formatCurrency(product.price, product.currency || 'BRL');
   const oldPrice = formatCurrency(product.oldPrice, product.currency || 'BRL');
   const rating = product.rating === null || product.rating === undefined ? '' : `${product.rating}`;
+  const reviewCount =
+    product.reviewCount === null || product.reviewCount === undefined ? '' : `${product.reviewCount}`;
+  const availabilityLabels = {
+    inStock: 'Disponível',
+    outOfStock: 'Indisponível',
+    limited: 'Estoque limitado',
+    unknown: 'Disponibilidade não informada',
+  };
+  const availability = product.availability ? availabilityLabels[product.availability] || product.availability : '';
   const pros = Array.isArray(item?.pros) ? item.pros : [];
   const cons = Array.isArray(item?.cons) ? item.cons : [];
   const sourcePageUrl = page?.category?.slug && page?.slug ? `/${page.category.slug}/${page.slug}` : '';
@@ -34,12 +43,16 @@ export function useController(item, page) {
   return {
     position: item?.position || '-',
     title,
+    brand: product.brand || '',
+    availability,
     summary: item?.summary || '',
     imageUrl: product.imageUrl || '',
     imageAlt,
     price,
     oldPrice,
     rating,
+    reviewCount,
+    hasMeta: Boolean(price || oldPrice || rating || availability),
     pros,
     cons,
     highlight: item?.highlight || '',
