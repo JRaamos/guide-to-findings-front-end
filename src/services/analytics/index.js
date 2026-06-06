@@ -1,4 +1,5 @@
 import { apiClient } from '@/services/api/client';
+import { googleAnalyticsService } from './googleAnalytics';
 
 const validEventTypes = ['productClick', 'affiliateClick', 'ctaClick'];
 
@@ -14,4 +15,11 @@ export function trackClickEvent(payload = {}) {
 
 export const analyticsService = {
   trackClickEvent,
+  googleAnalytics: googleAnalyticsService,
 };
+
+export {
+  trackPageView,
+  trackEvent,
+  trackAffiliateClick as trackGoogleAnalyticsAffiliateClick,
+} from './googleAnalytics';

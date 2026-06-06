@@ -1,4 +1,5 @@
 import { MainLayout } from '@/layouts/MainLayout';
+import { GoogleAnalytics } from '@/components/seo/GoogleAnalytics';
 import { Providers } from '@/styles/Providers';
 import { siteConfig } from '@/config/site';
 import { BRAND } from '@/constants/brand';
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
       <body>
+        <GoogleAnalytics />
         <Providers>
           <MainLayout>{children}</MainLayout>
         </Providers>

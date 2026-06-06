@@ -1,4 +1,5 @@
 import { trackClickEvent } from '@/services/analytics';
+import { trackAffiliateClick as trackGoogleAnalyticsAffiliateClick } from '@/services/analytics/googleAnalytics';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { getImageAlt } from '@/utils/getImageAlt';
 
@@ -37,6 +38,14 @@ export function useController(item, page) {
       marketplaceId: product.marketplace?.id || affiliateLink.marketplace?.id,
       sourcePageUrl,
       sourcePageTitle: page?.title || '',
+    });
+
+    trackGoogleAnalyticsAffiliateClick({
+      productId: product.id,
+      productName: product.name || title,
+      marketplace: product.marketplace?.name || affiliateLink.marketplace?.name || '',
+      pageSlug: page?.slug || '',
+      position: item?.position || '',
     });
   }
 

@@ -5,6 +5,8 @@ export const Card = styled.article`
   grid-template-columns: 44px 176px minmax(0, 1fr) 168px;
   gap: ${({ theme }) => theme.spacing.lg};
   align-items: start;
+  min-width: 0;
+  max-width: 100%;
   padding: ${({ theme }) => theme.spacing.lg};
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -83,6 +85,7 @@ export const Title = styled.h3`
   color: ${({ theme }) => theme.colors.textPrimary};
   font-size: ${({ theme }) => theme.fontSizes.xl};
   line-height: 1.25;
+  overflow-wrap: anywhere;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     font-size: ${({ theme }) => theme.fontSizes.lg};
@@ -100,6 +103,7 @@ export const Summary = styled.p`
   margin: ${({ theme }) => theme.spacing.sm} 0 0;
   color: ${({ theme }) => theme.colors.textSecondary};
   line-height: 1.6;
+  overflow-wrap: anywhere;
 `;
 
 export const MetaList = styled.div`
@@ -107,6 +111,7 @@ export const MetaList = styled.div`
   flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing.sm};
   margin-top: ${({ theme }) => theme.spacing.md};
+  min-width: 0;
 `;
 
 export const MetaItem = styled.span`

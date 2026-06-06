@@ -9,6 +9,7 @@ export const Hero = styled.header`
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
   gap: ${({ theme }) => theme.spacing.xl};
+  align-items: start;
   width: min(100%, ${({ theme }) => theme.layout.container});
   margin: 0 auto;
   padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing.lg}
@@ -150,9 +151,18 @@ export const TopHighlights = styled.div`
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: ${({ theme }) => theme.spacing.md};
   align-self: end;
+  min-width: 0;
+  max-width: 100%;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    grid-template-columns: 1fr;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(260px, 84vw);
+    grid-template-columns: none;
+    align-self: stretch;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+    padding-bottom: ${({ theme }) => theme.spacing.sm};
   }
 `;
 
@@ -161,11 +171,14 @@ export const HighlightCard = styled.article`
   grid-template-rows: auto auto 1fr auto auto auto;
   gap: ${({ theme }) => theme.spacing.sm};
   min-width: 0;
+  max-width: 100%;
   padding: ${({ theme }) => theme.spacing.md};
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
   box-shadow: ${({ theme }) => theme.shadows.sm};
+  scroll-snap-align: start;
+  overflow: hidden;
 `;
 
 export const HighlightLabel = styled.p`
@@ -198,6 +211,11 @@ export const HighlightFallback = styled.span`
 `;
 
 export const HighlightTitle = styled.h2`
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+  overflow-wrap: anywhere;
   margin: 0;
   color: ${({ theme }) => theme.colors.textPrimary};
   font-size: ${({ theme }) => theme.fontSizes.md};
@@ -378,6 +396,7 @@ export const QuickSummaryTitle = styled.h3`
   color: ${({ theme }) => theme.colors.textPrimary};
   font-size: ${({ theme }) => theme.fontSizes.lg};
   line-height: 1.3;
+  overflow-wrap: anywhere;
 `;
 
 export const QuickSummaryText = styled.p`
@@ -442,6 +461,7 @@ export const ComparisonTable = styled.table`
   td:first-child {
     color: ${({ theme }) => theme.colors.textPrimary};
     font-weight: ${({ theme }) => theme.fontWeights.semibold};
+    overflow-wrap: anywhere;
   }
 `;
 
@@ -569,6 +589,11 @@ export const SidebarRank = styled.span`
 `;
 
 export const SidebarProduct = styled.p`
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  overflow-wrap: anywhere;
   margin: 0;
   color: ${({ theme }) => theme.colors.textSecondary};
   font-size: ${({ theme }) => theme.fontSizes.sm};
