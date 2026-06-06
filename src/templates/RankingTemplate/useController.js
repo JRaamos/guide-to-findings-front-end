@@ -4,6 +4,64 @@ import { formatCurrency } from '@/utils/formatCurrency';
 import { formatDate } from '@/utils/formatDate';
 
 const highlightLabels = ['🥇 Melhor geral', '🥈 Melhor custo-benefício', '🥉 Melhor alternativa'];
+const semanticSectionLabels = {
+  topPicks: ['top picks do ranking', 'top picks'],
+  comparison: ['comparativo rapido', 'comparativo rápido', 'comparacao rapida', 'comparação rápida'],
+  methodology: ['como avaliamos'],
+};
+
+function normalizeText(value) {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function normalizeMatch(value) {
+  return normalizeText(value)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function getSectionKey(line) {
+  const normalizedLine = normalizeMatch(line);
+
+  return Object.entries(semanticSectionLabels).find(([, labels]) =>
+    labels.includes(normalizedLine)
+  )?.[0];
+}
+
+function splitSemanticIntro(intro) {
+  const sections = {
+    introduction: [],
+    topPicks: [],
+    comparison: [],
+    methodology: [],
+  };
+  let activeSection = 'introduction';
+
+  for (const line of normalizeText(intro).split(/\n+/)) {
+    const trimmedLine = line.trim();
+
+    if (!trimmedLine) {
+      continue;
+    }
+
+    const sectionKey = getSectionKey(trimmedLine);
+
+    if (sectionKey) {
+      activeSection = sectionKey;
+      continue;
+    }
+
+    sections[activeSection].push(trimmedLine);
+  }
+
+  return {
+    introduction: sections.introduction.join('\n\n'),
+    topPicksText: sections.topPicks.join('\n'),
+    comparison: sections.comparison.join('\n\n'),
+    methodology: sections.methodology.join('\n\n'),
+  };
+}
 
 function getProduct(item) {
   return item?.product || {};
@@ -15,6 +73,10 @@ function getAffiliateLink(item) {
 
 function getProductTitle(item) {
   return item?.title || getProduct(item).name || 'Produto do ranking';
+}
+
+function getProductName(item) {
+  return getProduct(item).name || item?.title || '';
 }
 
 function getPriceLabel(product) {
@@ -42,25 +104,129 @@ function buildSourcePageUrl(page) {
   return page?.category?.slug && page?.slug ? `/${page.category.slug}/${page.slug}` : '';
 }
 
-function buildHighlight(item, index) {
+function findRankingItemByProductName(rankingItems, productName) {
+  const normalizedProductName = normalizeMatch(productName);
+
+  if (!normalizedProductName) {
+    return null;
+  }
+
+  return (
+    rankingItems.find((item) => {
+      const normalizedItemTitle = normalizeMatch(getProductTitle(item));
+      const normalizedProductTitle = normalizeMatch(getProductName(item));
+
+      return (
+        normalizedProductName.includes(normalizedItemTitle) ||
+        normalizedItemTitle.includes(normalizedProductName) ||
+        normalizedProductName.includes(normalizedProductTitle) ||
+        normalizedProductTitle.includes(normalizedProductName)
+      );
+    }) || null
+  );
+}
+
+function parseTopPickLine(line) {
+  const [labelPart, ...contentParts] = line.split(':');
+  const content = contentParts.join(':').trim();
+
+  if (!labelPart || !content) {
+    return null;
+  }
+
+  const productMatch = content.match(/^(.+?)\.\s*(.+)$/);
+
+  return {
+    label: labelPart.trim(),
+    productName: (productMatch?.[1] || content).trim(),
+    reason: (productMatch?.[2] || '').trim(),
+  };
+}
+
+function buildSemanticTopPicks(rankingItems, semanticTopPicks) {
+  const sourcePicks = Array.isArray(semanticTopPicks) && semanticTopPicks.length
+    ? semanticTopPicks
+    : [];
+
+  return sourcePicks
+    .map((pick, index) => {
+      const productName = normalizeText(pick.productName || pick.product || pick.title);
+      const item = findRankingItemByProductName(rankingItems, productName);
+
+      if (!item) {
+        return null;
+      }
+
+      return {
+        id: `${item.id || item.position}-${normalizeMatch(pick.label) || index}`,
+        label: normalizeText(pick.label) || highlightLabels[index] || 'Destaque',
+        reason: normalizeText(pick.reason || pick.summary),
+        item,
+      };
+    })
+    .filter(Boolean)
+    .slice(0, 3);
+}
+
+function parseTopPicksFromText(topPicksText, rankingItems) {
+  if (!topPicksText) {
+    return [];
+  }
+
+  return buildSemanticTopPicks(
+    rankingItems,
+    topPicksText
+      .split('\n')
+      .map(parseTopPickLine)
+      .filter(Boolean)
+  );
+}
+
+function buildSchemaJson(schemaData) {
+  if (!schemaData || typeof schemaData !== 'object' || Array.isArray(schemaData)) {
+    return '';
+  }
+
+  return JSON.stringify(schemaData).replace(/</g, '\\u003c');
+}
+
+function buildHighlight(item, index, semanticPick) {
   const product = getProduct(item);
   const affiliateLink = getAffiliateLink(item);
 
   return {
-    id: item?.id || item?.position || index,
-    label: highlightLabels[index] || 'Destaque',
+    id: semanticPick?.id || item?.id || item?.position || index,
+    label: semanticPick?.label || highlightLabels[index] || 'Destaque',
     position: item?.position || index + 1,
     title: getProductTitle(item),
     brand: product?.brand || '',
     imageUrl: product?.imageUrl || '',
     price: getPriceLabel(product),
+    reason: semanticPick?.reason || item?.highlight || '',
     affiliateUrl: affiliateLink?.affiliateUrl || '',
     ctaText: item?.ctaText || 'Ver oferta',
     item,
   };
 }
 
-function buildQuickSummary(rankingItems) {
+function buildTopHighlights(rankingItems, semanticTopPicks) {
+  if (semanticTopPicks.length > 0) {
+    return semanticTopPicks.map((pick, index) => buildHighlight(pick.item, index, pick));
+  }
+
+  return rankingItems.slice(0, 3).map(buildHighlight);
+}
+
+function buildQuickSummary(rankingItems, semanticTopPicks) {
+  if (semanticTopPicks.length > 0) {
+    return semanticTopPicks.map((pick) => ({
+      label: pick.label,
+      title: getProductTitle(pick.item),
+      position: pick.item?.position || '-',
+      highlight: pick.reason || pick.item?.highlight || '',
+    }));
+  }
+
   const summarySource = [
     ['Melhor geral', rankingItems[0]],
     ['Melhor custo-benefício', rankingItems[1] || rankingItems[0]],
@@ -99,6 +265,12 @@ export function useController(page) {
   const ranking = page?.ranking || {};
   const rankingItems = Array.isArray(ranking.items) ? ranking.items : [];
   const faqs = Array.isArray(page?.faqs) ? page.faqs : [];
+  const semanticIntro = splitSemanticIntro(page?.intro || '');
+  const explicitTopPicks = Array.isArray(page?.topPicks) ? page.topPicks : [];
+  const explicitSemanticTopPicks = buildSemanticTopPicks(rankingItems, explicitTopPicks);
+  const semanticTopPicks = explicitSemanticTopPicks.length
+    ? explicitSemanticTopPicks
+    : parseTopPicksFromText(semanticIntro.topPicksText, rankingItems);
   const primaryItem = rankingItems[0] || null;
   const primaryAffiliateUrl = getAffiliateLink(primaryItem)?.affiliateUrl || '';
   const sourcePageUrl = buildSourcePageUrl(page);
@@ -137,7 +309,10 @@ export function useController(page) {
   const navItems = [
     { href: '#resumo', label: 'Resumo' },
     { href: '#ranking', label: 'Ranking' },
-    { href: '#comparativo', label: 'Comparativo' },
+    ...(semanticIntro.comparison || rankingItems.length > 0
+      ? [{ href: '#comparativo', label: 'Comparativo' }]
+      : []),
+    { href: '#metodologia', label: 'Como avaliamos' },
     ...(faqs.length > 0 ? [{ href: '#faq', label: 'FAQ' }] : []),
     ...(page?.conclusion ? [{ href: '#conclusao', label: 'Conclusão' }] : []),
   ];
@@ -145,7 +320,9 @@ export function useController(page) {
   return {
     title: page?.title || 'Ranking',
     excerpt: page?.excerpt || '',
-    intro: page?.intro || '',
+    intro: semanticIntro.introduction || page?.intro || '',
+    comparison: page?.comparison || semanticIntro.comparison || '',
+    methodology: page?.methodology || semanticIntro.methodology || '',
     conclusion: page?.conclusion || '',
     breadcrumbs: Array.isArray(page?.breadcrumbs) ? page.breadcrumbs : [],
     categoryName,
@@ -154,14 +331,15 @@ export function useController(page) {
     primaryAffiliateUrl,
     primaryCtaText: primaryItem?.ctaText || 'Ver melhor opção',
     totalItems: rankingItems.length,
-    topHighlights: rankingItems.slice(0, 3).map(buildHighlight),
-    quickSummary: buildQuickSummary(rankingItems),
+    topHighlights: buildTopHighlights(rankingItems, semanticTopPicks),
+    quickSummary: buildQuickSummary(rankingItems, semanticTopPicks),
     comparisonRows: rankingItems.map(buildComparisonRow),
     navItems,
     rankingTitle: ranking.title || '',
     rankingDescription: ranking.description || '',
     rankingItems,
     faqs,
+    schemaJson: buildSchemaJson(page?.seo?.schemaData),
     trackAffiliateClick,
   };
 }

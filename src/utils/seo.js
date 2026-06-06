@@ -43,6 +43,28 @@ function normalizeTitle(value) {
   return title;
 }
 
+function normalizeSeoKeywords(seo = {}) {
+  const keywords = [
+    seo.focusKeyword,
+    ...(Array.isArray(seo.secondaryKeywords) ? seo.secondaryKeywords : []),
+  ];
+  const normalizedKeywords = [];
+
+  for (const keyword of keywords) {
+    const normalizedKeyword = normalizeBrandText(keyword);
+
+    if (
+      typeof normalizedKeyword === 'string' &&
+      normalizedKeyword.trim() &&
+      !normalizedKeywords.includes(normalizedKeyword.trim())
+    ) {
+      normalizedKeywords.push(normalizedKeyword.trim());
+    }
+  }
+
+  return normalizedKeywords;
+}
+
 export function normalizeBrandText(value) {
   if (typeof value !== 'string') {
     return value;
@@ -81,6 +103,7 @@ export function buildPageMetadata(pageData) {
   );
   const robots = robotsByValue[seo.robots] || defaultSeo.robots;
   const canonical = buildPageCanonical(pageData);
+  const seoKeywords = normalizeSeoKeywords(seo);
 
   return {
     title,
@@ -97,6 +120,7 @@ export function buildPageMetadata(pageData) {
       siteName: BRAND.name,
       url: canonical,
       type: 'article',
+      tags: seoKeywords.length ? seoKeywords : undefined,
       images: seo.ogImage?.url ? [{ url: seo.ogImage.url, alt: seo.ogImage.alt || title }] : [],
     },
     twitter: {

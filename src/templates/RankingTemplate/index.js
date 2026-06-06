@@ -10,6 +10,8 @@ export function RankingTemplate({ page }) {
     title,
     excerpt,
     intro,
+    comparison,
+    methodology,
     conclusion,
     breadcrumbs,
     categoryName,
@@ -26,11 +28,19 @@ export function RankingTemplate({ page }) {
     rankingDescription,
     rankingItems,
     faqs,
+    schemaJson,
     trackAffiliateClick,
   } = useController(page);
 
   return (
     <S.Container>
+      {schemaJson ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: schemaJson }}
+        />
+      ) : null}
+
       <S.Hero>
         <S.HeroContent>
           {breadcrumbs.length > 0 ? (
@@ -84,6 +94,7 @@ export function RankingTemplate({ page }) {
                 <S.HighlightTitle>{highlight.title}</S.HighlightTitle>
                 {highlight.brand ? <S.HighlightBrand>{highlight.brand}</S.HighlightBrand> : null}
                 {highlight.price ? <S.HighlightPrice>{highlight.price}</S.HighlightPrice> : null}
+                {highlight.reason ? <S.HighlightReason>{highlight.reason}</S.HighlightReason> : null}
                 {highlight.affiliateUrl ? (
                   <S.HighlightCta
                     href={highlight.affiliateUrl}
@@ -152,7 +163,8 @@ export function RankingTemplate({ page }) {
             {comparisonRows.length > 0 ? (
               <S.Section id="comparativo">
                 <S.SectionEyebrow>Comparativo</S.SectionEyebrow>
-                <S.SectionTitle>Compare as opções lado a lado</S.SectionTitle>
+                <S.SectionTitle>Comparativo rápido</S.SectionTitle>
+                {comparison ? <S.SectionText>{comparison}</S.SectionText> : null}
                 <S.TableScroller>
                   <S.ComparisonTable>
                     <thead>
@@ -195,15 +207,19 @@ export function RankingTemplate({ page }) {
               </S.Section>
             ) : null}
 
-            <S.Section>
+            <S.Section id="metodologia">
               <S.SectionEyebrow>Como escolhemos</S.SectionEyebrow>
               <S.SectionTitle>Critérios usados para organizar este ranking</S.SectionTitle>
-              <S.CriteriaList>
-                <S.CriteriaItem>Relevância do produto para a intenção de compra.</S.CriteriaItem>
-                <S.CriteriaItem>Preço, histórico de oferta e custo-benefício aparente.</S.CriteriaItem>
-                <S.CriteriaItem>Disponibilidade e informações recebidas do marketplace.</S.CriteriaItem>
-                <S.CriteriaItem>Características técnicas, marca, modelo e sinais editoriais.</S.CriteriaItem>
-              </S.CriteriaList>
+              {methodology ? (
+                <S.SectionText>{methodology}</S.SectionText>
+              ) : (
+                <S.CriteriaList>
+                  <S.CriteriaItem>Relevância do produto para a intenção de compra.</S.CriteriaItem>
+                  <S.CriteriaItem>Preço, histórico de oferta e custo-benefício aparente.</S.CriteriaItem>
+                  <S.CriteriaItem>Disponibilidade e informações recebidas do marketplace.</S.CriteriaItem>
+                  <S.CriteriaItem>Características técnicas, marca, modelo e sinais editoriais.</S.CriteriaItem>
+                </S.CriteriaList>
+              )}
             </S.Section>
 
             {faqs.length > 0 ? (

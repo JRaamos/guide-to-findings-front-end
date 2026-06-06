@@ -235,6 +235,17 @@ export const HighlightPrice = styled.p`
   font-weight: ${({ theme }) => theme.fontWeights.bold};
 `;
 
+export const HighlightReason = styled.p`
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  margin: 0;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  line-height: 1.45;
+`;
+
 export const HighlightCta = styled.a`
   display: inline-flex;
   align-items: center;
