@@ -3,7 +3,7 @@ import { trackAffiliateClick as trackGoogleAnalyticsAffiliateClick } from '@/ser
 import { formatCurrency } from '@/utils/formatCurrency';
 import { formatDate } from '@/utils/formatDate';
 
-const highlightLabels = ['🥇 Melhor geral', '🥈 Melhor custo-benefício', '🥉 Melhor alternativa'];
+const highlightLabels = ['Melhor geral', 'Melhor custo-benefício', 'Melhor alternativa'];
 const semanticSectionLabels = {
   topPicks: ['top picks do ranking', 'top picks'],
   comparison: ['comparativo rapido', 'comparativo rápido', 'comparacao rapida', 'comparação rápida'],
@@ -81,6 +81,10 @@ function getProductName(item) {
 
 function getPriceLabel(product) {
   return formatCurrency(product?.price, product?.currency || 'BRL');
+}
+
+function getRatingLabel(product) {
+  return product?.rating === null || product?.rating === undefined ? '' : `${product.rating}`;
 }
 
 function getAvailabilityLabel(product) {
@@ -202,11 +206,35 @@ function buildHighlight(item, index, semanticPick) {
     brand: product?.brand || '',
     imageUrl: product?.imageUrl || '',
     price: getPriceLabel(product),
-    reason: semanticPick?.reason || item?.highlight || '',
+    rating: getRatingLabel(product),
+    availability: getAvailabilityLabel(product),
+    reason: semanticPick?.reason || item?.highlight || item?.summary || '',
     affiliateUrl: affiliateLink?.affiliateUrl || '',
     ctaText: item?.ctaText || 'Ver oferta',
     item,
   };
+}
+
+function getBestForLabel(index, semanticLabel) {
+  if (semanticLabel) {
+    return semanticLabel.replace(/^melhor\s*/i, '').trim() || semanticLabel;
+  }
+
+  const labels = ['Melhor escolha', 'Custo-benefício', 'Alternativa'];
+  return labels[index] || 'Comparar';
+}
+
+function buildDecisionRows(topHighlights) {
+  return topHighlights.slice(0, 3).map((highlight, index) => ({
+    id: highlight.id,
+    title: highlight.title,
+    rating: highlight.rating,
+    bestFor: getBestForLabel(index, highlight.label),
+    price: highlight.price,
+    affiliateUrl: highlight.affiliateUrl,
+    ctaText: highlight.ctaText,
+    item: highlight.item,
+  }));
 }
 
 function buildTopHighlights(rankingItems, semanticTopPicks) {
@@ -244,6 +272,58 @@ function buildQuickSummary(rankingItems, semanticTopPicks) {
     }));
 }
 
+function buildExecutiveSummary(topHighlights, comparison) {
+  const bestChoice = topHighlights[0];
+  const costBenefit = topHighlights[1] || topHighlights[0];
+  const alternative = topHighlights[2] || topHighlights[1] || topHighlights[0];
+
+  return [
+    {
+      question: 'Qual comprar?',
+      answer: bestChoice
+        ? `${bestChoice.title} é a primeira opção do ranking${bestChoice.reason ? `: ${bestChoice.reason}` : '.'}`
+        : 'Use o ranking completo para comparar os produtos disponíveis.',
+    },
+    {
+      question: 'Para quem é melhor?',
+      answer: costBenefit
+        ? `${costBenefit.title} se destaca como uma escolha equilibrada${costBenefit.reason ? `: ${costBenefit.reason}` : '.'}`
+        : 'Compare preço, disponibilidade e marca antes de decidir.',
+    },
+    {
+      question: 'Quando escolher outra opção?',
+      answer: alternative
+        ? `${alternative.title} funciona como alternativa quando a prioridade muda${alternative.reason ? `: ${alternative.reason}` : '.'}`
+        : comparison || 'Escolha outra opção quando preço, estoque ou perfil de uso forem mais importantes.',
+    },
+  ].filter((item) => item.answer);
+}
+
+function buildTrustSignals(hasMethodology, hasComparison, updatedLabel) {
+  return [
+    {
+      label: 'Critérios claros',
+      text: hasMethodology
+        ? 'Metodologia editorial aplicada ao ranking.'
+        : 'Produtos organizados por relevância, preço e disponibilidade.',
+    },
+    {
+      label: 'Comparação prática',
+      text: hasComparison
+        ? 'Análise comparativa disponível antes da tabela.'
+        : 'Tabela com preço, marca, disponibilidade e posição.',
+    },
+    {
+      label: 'Transparência afiliada',
+      text: 'Os links de oferta podem gerar comissão sem custo adicional para você.',
+    },
+    {
+      label: updatedLabel ? 'Última atualização' : 'Decisão orientada',
+      text: updatedLabel || 'Resumo rápido para comparar antes de comprar.',
+    },
+  ];
+}
+
 function buildComparisonRow(item) {
   const product = getProduct(item);
   const affiliateLink = getAffiliateLink(item);
@@ -277,6 +357,9 @@ export function useController(page) {
   const updatedAt = page?.updatedAt || page?.publishedAt || page?.createdAt || '';
   const updatedLabel = updatedAt ? formatDate(updatedAt) : '';
   const categoryName = page?.category?.name || '';
+  const topHighlights = buildTopHighlights(rankingItems, semanticTopPicks);
+  const comparison = page?.comparison || semanticIntro.comparison || '';
+  const methodology = page?.methodology || semanticIntro.methodology || '';
 
   function trackAffiliateClick(item) {
     const product = getProduct(item);
@@ -321,8 +404,8 @@ export function useController(page) {
     title: page?.title || 'Ranking',
     excerpt: page?.excerpt || '',
     intro: semanticIntro.introduction || page?.intro || '',
-    comparison: page?.comparison || semanticIntro.comparison || '',
-    methodology: page?.methodology || semanticIntro.methodology || '',
+    comparison,
+    methodology,
     conclusion: page?.conclusion || '',
     breadcrumbs: Array.isArray(page?.breadcrumbs) ? page.breadcrumbs : [],
     categoryName,
@@ -331,8 +414,11 @@ export function useController(page) {
     primaryAffiliateUrl,
     primaryCtaText: primaryItem?.ctaText || 'Ver melhor opção',
     totalItems: rankingItems.length,
-    topHighlights: buildTopHighlights(rankingItems, semanticTopPicks),
+    topHighlights,
     quickSummary: buildQuickSummary(rankingItems, semanticTopPicks),
+    executiveSummary: buildExecutiveSummary(topHighlights, comparison),
+    trustSignals: buildTrustSignals(Boolean(methodology), Boolean(comparison), updatedLabel),
+    decisionRows: buildDecisionRows(topHighlights),
     comparisonRows: rankingItems.map(buildComparisonRow),
     navItems,
     rankingTitle: ranking.title || '',

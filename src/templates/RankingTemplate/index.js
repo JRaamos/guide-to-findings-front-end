@@ -1,6 +1,8 @@
 'use client';
 
 import { ProductRankingCard } from '@/components/cards/ProductRankingCard';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 
 import { useController } from './useController';
 import * as S from './styles';
@@ -22,6 +24,9 @@ export function RankingTemplate({ page }) {
     totalItems,
     topHighlights,
     quickSummary,
+    executiveSummary,
+    trustSignals,
+    decisionRows,
     comparisonRows,
     navItems,
     rankingTitle,
@@ -57,77 +62,158 @@ export function RankingTemplate({ page }) {
             </S.Breadcrumbs>
           ) : null}
 
-          <S.Label>{categoryName ? `${categoryName} / Ranking` : 'Ranking'}</S.Label>
+          <S.HeroBadges>
+            <Badge variant="primary">{categoryName ? `${categoryName} / Ranking` : 'Ranking'}</Badge>
+            {totalItems > 0 ? <Badge variant="info">{totalItems} produtos comparados</Badge> : null}
+          </S.HeroBadges>
+
           <S.Title>{title}</S.Title>
           {excerpt ? <S.Description>{excerpt}</S.Description> : null}
 
           <S.HeroMeta>
-            {categoryName ? <S.MetaPill>{categoryName}</S.MetaPill> : null}
             {updatedLabel ? <S.MetaPill>Atualizado em {updatedLabel}</S.MetaPill> : null}
             {totalItems > 0 ? <S.MetaPill>{totalItems} produtos avaliados</S.MetaPill> : null}
           </S.HeroMeta>
 
-          {primaryAffiliateUrl ? (
-            <S.PrimaryCta
-              href={primaryAffiliateUrl}
-              target="_blank"
-              rel="nofollow sponsored noopener noreferrer"
-              onClick={() => trackAffiliateClick(primaryItem)}
-            >
-              {primaryCtaText}
-            </S.PrimaryCta>
-          ) : null}
+          <S.HeroActions>
+            {primaryAffiliateUrl ? (
+              <Button
+                href={primaryAffiliateUrl}
+                target="_blank"
+                rel="nofollow sponsored noopener noreferrer"
+                size="lg"
+                onClick={() => trackAffiliateClick(primaryItem)}
+              >
+                {primaryCtaText}
+              </Button>
+            ) : null}
+            <S.HeroAnchor href="#ranking">Ver ranking completo</S.HeroAnchor>
+          </S.HeroActions>
         </S.HeroContent>
 
-        {topHighlights.length > 0 ? (
-          <S.TopHighlights aria-label="Top 3 destaques">
-            {topHighlights.map((highlight) => (
-              <S.HighlightCard key={highlight.id}>
-                <S.HighlightLabel>{highlight.label}</S.HighlightLabel>
-                <S.HighlightMedia>
+        <S.HeroTopPicks aria-label="Recomendações principais">
+          <S.HeroTopPicksTitle>Escolhas rápidas</S.HeroTopPicksTitle>
+          {topHighlights.length > 0 ? (
+            topHighlights.map((highlight) => (
+              <S.HeroPick key={highlight.id}>
+                <S.HeroPickMedia>
                   {highlight.imageUrl ? (
-                    <S.HighlightImage src={highlight.imageUrl} alt={highlight.title} />
+                    <S.HeroPickImage src={highlight.imageUrl} alt={highlight.title} />
                   ) : (
-                    <S.HighlightFallback>Sem imagem</S.HighlightFallback>
+                    <S.HeroPickFallback>Sem imagem</S.HeroPickFallback>
                   )}
-                </S.HighlightMedia>
-                <S.HighlightTitle>{highlight.title}</S.HighlightTitle>
-                {highlight.brand ? <S.HighlightBrand>{highlight.brand}</S.HighlightBrand> : null}
-                {highlight.price ? <S.HighlightPrice>{highlight.price}</S.HighlightPrice> : null}
-                {highlight.reason ? <S.HighlightReason>{highlight.reason}</S.HighlightReason> : null}
+                </S.HeroPickMedia>
+                <S.HeroPickContent>
+                  <S.HeroPickLabel>{highlight.label}</S.HeroPickLabel>
+                  <S.HeroPickTitle>{highlight.title}</S.HeroPickTitle>
+                  <S.HeroPickMeta>
+                    {highlight.price ? <span>{highlight.price}</span> : null}
+                    {highlight.rating ? <span>Nota {highlight.rating}</span> : null}
+                  </S.HeroPickMeta>
+                </S.HeroPickContent>
                 {highlight.affiliateUrl ? (
-                  <S.HighlightCta
+                  <Button
                     href={highlight.affiliateUrl}
                     target="_blank"
                     rel="nofollow sponsored noopener noreferrer"
+                    size="sm"
                     onClick={() => trackAffiliateClick(highlight.item)}
                   >
                     Ver oferta
-                  </S.HighlightCta>
+                  </Button>
                 ) : null}
-              </S.HighlightCard>
-            ))}
-          </S.TopHighlights>
-        ) : null}
+              </S.HeroPick>
+            ))
+          ) : (
+            <S.HeroChoiceMeta>Ranking em preparação.</S.HeroChoiceMeta>
+          )}
+        </S.HeroTopPicks>
       </S.Hero>
 
-      <S.StickyNav aria-label="Navegação da página">
-        <S.StickyNavInner>
+      {decisionRows.length > 0 ? (
+        <S.DecisionTableSection aria-label="Comparativo rápido do Top 3">
+          <S.DecisionTableHeader>
+            <S.DecisionTableEyebrow>Decisão rápida</S.DecisionTableEyebrow>
+            <S.DecisionTableTitle>Top 3 em uma olhada</S.DecisionTableTitle>
+          </S.DecisionTableHeader>
+          <S.DecisionTableScroller>
+            <S.DecisionTable>
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Nota</th>
+                  <th>Melhor para</th>
+                  <th>Preço</th>
+                  <th>Comprar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {decisionRows.map((row) => (
+                  <tr key={row.id}>
+                    <td>{row.title}</td>
+                    <td>{row.rating || '-'}</td>
+                    <td>{row.bestFor}</td>
+                    <td>{row.price || '-'}</td>
+                    <td>
+                      {row.affiliateUrl ? (
+                        <Button
+                          href={row.affiliateUrl}
+                          target="_blank"
+                          rel="nofollow sponsored noopener noreferrer"
+                          size="sm"
+                          onClick={() => trackAffiliateClick(row.item)}
+                        >
+                          Ver oferta
+                        </Button>
+                      ) : (
+                        <S.TableUnavailable>Indisponível</S.TableUnavailable>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </S.DecisionTable>
+          </S.DecisionTableScroller>
+        </S.DecisionTableSection>
+      ) : null}
+
+      <S.TrustStrip aria-label="Critérios editoriais">
+        {trustSignals.slice(0, 3).map((signal) => (
+          <S.TrustStripItem key={signal.label}>
+            <S.TrustSignalLabel>{signal.label}</S.TrustSignalLabel>
+            <S.TrustSignalText>{signal.text}</S.TrustSignalText>
+          </S.TrustStripItem>
+        ))}
+      </S.TrustStrip>
+
+      <S.MobileNav aria-label="Navegação da página">
+        <S.MobileNavInner>
           {navItems.map((item) => (
-            <S.StickyNavLink key={item.href} href={item.href}>
+            <S.MobileNavLink key={item.href} href={item.href}>
               {item.label}
-            </S.StickyNavLink>
+            </S.MobileNavLink>
           ))}
-        </S.StickyNavInner>
-      </S.StickyNav>
+        </S.MobileNavInner>
+      </S.MobileNav>
 
       <S.Body>
         <S.ContentGrid>
           <S.MainColumn>
             <S.Section id="resumo">
-              <S.SectionEyebrow>Resumo rápido</S.SectionEyebrow>
-              <S.SectionTitle>Escolhas rápidas para decidir sem perder tempo</S.SectionTitle>
+              <S.SectionEyebrow>Resumo executivo</S.SectionEyebrow>
+              <S.SectionTitle>Decisão rápida antes de comparar produto por produto</S.SectionTitle>
               {intro ? <S.RichText dangerouslySetInnerHTML={{ __html: intro }} /> : null}
+
+              {executiveSummary.length > 0 ? (
+                <S.ExecutiveSummaryGrid>
+                  {executiveSummary.map((summary) => (
+                    <S.ExecutiveSummaryItem key={summary.question}>
+                      <S.ExecutiveSummaryQuestion>{summary.question}</S.ExecutiveSummaryQuestion>
+                      <S.ExecutiveSummaryAnswer>{summary.answer}</S.ExecutiveSummaryAnswer>
+                    </S.ExecutiveSummaryItem>
+                  ))}
+                </S.ExecutiveSummaryGrid>
+              ) : null}
 
               {quickSummary.length > 0 ? (
                 <S.QuickSummaryGrid>
@@ -163,7 +249,7 @@ export function RankingTemplate({ page }) {
             {comparisonRows.length > 0 ? (
               <S.Section id="comparativo">
                 <S.SectionEyebrow>Comparativo</S.SectionEyebrow>
-                <S.SectionTitle>Comparativo rápido</S.SectionTitle>
+                <S.SectionTitle>Comparativo completo</S.SectionTitle>
                 {comparison ? <S.SectionText>{comparison}</S.SectionText> : null}
                 <S.TableScroller>
                   <S.ComparisonTable>
@@ -187,14 +273,15 @@ export function RankingTemplate({ page }) {
                           <td>{row.position}</td>
                           <td>
                             {row.affiliateUrl ? (
-                              <S.TableCta
+                              <Button
                                 href={row.affiliateUrl}
                                 target="_blank"
                                 rel="nofollow sponsored noopener noreferrer"
+                                size="sm"
                                 onClick={() => trackAffiliateClick(row.item)}
                               >
                                 {row.ctaText}
-                              </S.TableCta>
+                              </Button>
                             ) : (
                               <S.TableUnavailable>Indisponível</S.TableUnavailable>
                             )}
@@ -220,6 +307,10 @@ export function RankingTemplate({ page }) {
                   <S.CriteriaItem>Características técnicas, marca, modelo e sinais editoriais.</S.CriteriaItem>
                 </S.CriteriaList>
               )}
+              <S.TransparencyNote>
+                O Manual dos Achados usa dados disponíveis dos produtos, comparação editorial e links
+                afiliados. Uma compra feita pelos links pode gerar comissão, sem alterar o preço final.
+              </S.TransparencyNote>
             </S.Section>
 
             {faqs.length > 0 ? (
@@ -245,42 +336,55 @@ export function RankingTemplate({ page }) {
                 <S.SectionTitle>Qual vale mais a pena?</S.SectionTitle>
                 <S.RichText dangerouslySetInnerHTML={{ __html: conclusion }} />
                 {primaryAffiliateUrl ? (
-                  <S.FinalCta
-                    href={primaryAffiliateUrl}
-                    target="_blank"
-                    rel="nofollow sponsored noopener noreferrer"
-                    onClick={() => trackAffiliateClick(primaryItem)}
-                  >
-                    Ver melhor opção
-                  </S.FinalCta>
+                  <S.FinalAction>
+                    <Button
+                      href={primaryAffiliateUrl}
+                      target="_blank"
+                      rel="nofollow sponsored noopener noreferrer"
+                      size="lg"
+                      onClick={() => trackAffiliateClick(primaryItem)}
+                    >
+                      Ver melhor opção
+                    </Button>
+                  </S.FinalAction>
                 ) : null}
               </S.Section>
             ) : null}
           </S.MainColumn>
 
-          <S.Sidebar aria-label="Resumo do ranking">
+          <S.Sidebar aria-label="Melhor escolha">
             <S.SidebarBox>
-              <S.SidebarTitle>Top 3</S.SidebarTitle>
-              <S.SidebarList>
-                {topHighlights.map((highlight) => (
-                  <S.SidebarItem key={highlight.id}>
-                    <S.SidebarRank>{highlight.position}</S.SidebarRank>
-                    <S.SidebarProduct>{highlight.title}</S.SidebarProduct>
-                  </S.SidebarItem>
-                ))}
-              </S.SidebarList>
-              {updatedLabel ? <S.SidebarMeta>Atualizado em {updatedLabel}</S.SidebarMeta> : null}
-              {categoryName ? <S.SidebarMeta>{categoryName}</S.SidebarMeta> : null}
-              {primaryAffiliateUrl ? (
-                <S.SidebarCta
-                  href={primaryAffiliateUrl}
-                  target="_blank"
-                  rel="nofollow sponsored noopener noreferrer"
-                  onClick={() => trackAffiliateClick(primaryItem)}
-                >
-                  Ver melhor opção
-                </S.SidebarCta>
+              <S.SidebarTitle>Melhor escolha</S.SidebarTitle>
+              {topHighlights[0] ? (
+                <S.SidebarBest>
+                  <S.SidebarBestMedia>
+                    {topHighlights[0].imageUrl ? (
+                      <S.SidebarBestImage src={topHighlights[0].imageUrl} alt={topHighlights[0].title} />
+                    ) : (
+                      <S.HeroPickFallback>Sem imagem</S.HeroPickFallback>
+                    )}
+                  </S.SidebarBestMedia>
+                  <S.SidebarProduct>{topHighlights[0].title}</S.SidebarProduct>
+                  {topHighlights[0].price ? <S.SidebarPrice>{topHighlights[0].price}</S.SidebarPrice> : null}
+                  {topHighlights[0].affiliateUrl ? (
+                    <Button
+                      href={topHighlights[0].affiliateUrl}
+                      target="_blank"
+                      rel="nofollow sponsored noopener noreferrer"
+                      size="md"
+                      fullWidth
+                      onClick={() => trackAffiliateClick(topHighlights[0].item)}
+                    >
+                      Ver oferta
+                    </Button>
+                  ) : null}
+                </S.SidebarBest>
               ) : null}
+
+              <S.SidebarSummary>
+                {totalItems > 0 ? <S.SidebarMeta>{totalItems} produtos avaliados</S.SidebarMeta> : null}
+                {categoryName ? <S.SidebarMeta>{categoryName}</S.SidebarMeta> : null}
+              </S.SidebarSummary>
             </S.SidebarBox>
           </S.Sidebar>
         </S.ContentGrid>
