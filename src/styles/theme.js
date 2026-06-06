@@ -1,10 +1,13 @@
 export const theme = {
   colors: {
     primary: '#1D4ED8',
+    primaryHover: '#0B1220',
     secondary: '#0F766E',
+    secondaryHover: '#0B1220',
     background: '#F8FAFC',
     surface: '#FFFFFF',
     surfaceAlt: '#EEF2F7',
+    surfaceStrong: '#E5EAF1',
     white: '#FFFFFF',
     black: '#0B1220',
     textPrimary: '#111827',
@@ -15,8 +18,39 @@ export const theme = {
     warning: '#B45309',
     danger: '#B91C1C',
     focus: '#2563EB',
+    info: '#1D4ED8',
+    brand: {
+      primary: '#1D4ED8',
+      primaryHover: '#0B1220',
+      secondary: '#0F766E',
+      secondaryHover: '#0B1220',
+    },
+    page: {
+      background: '#F8FAFC',
+      surface: '#FFFFFF',
+      surfaceAlt: '#EEF2F7',
+      surfaceStrong: '#E5EAF1',
+    },
+    text: {
+      primary: '#111827',
+      secondary: '#4B5563',
+      muted: '#6B7280',
+      inverse: '#FFFFFF',
+    },
+    borderColor: {
+      default: '#D9E2EC',
+      strong: '#CBD5E1',
+      focus: '#2563EB',
+    },
+    state: {
+      success: '#15803D',
+      warning: '#B45309',
+      danger: '#B91C1C',
+      info: '#1D4ED8',
+    },
   },
   spacing: {
+    '2xs': '2px',
     xs: '4px',
     sm: '8px',
     md: '16px',
@@ -24,8 +58,17 @@ export const theme = {
     xl: '32px',
     xxl: '48px',
     xxxl: '64px',
+    '2xl': '48px',
+    '3xl': '64px',
+    '4xl': '96px',
   },
   radius: {
+    sm: '4px',
+    md: '8px',
+    lg: '12px',
+    pill: '999px',
+  },
+  radii: {
     sm: '4px',
     md: '8px',
     lg: '12px',
@@ -35,8 +78,10 @@ export const theme = {
     xs: '12px',
     sm: '14px',
     md: '16px',
+    bodyLarge: '18px',
     lg: '20px',
     xl: '24px',
+    titleLg: '32px',
     heading: '40px',
   },
   fontWeights: {
@@ -45,19 +90,90 @@ export const theme = {
     semibold: 600,
     bold: 700,
   },
+  typography: {
+    fontFamily:
+      'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    sizes: {
+      caption: '12px',
+      bodySmall: '14px',
+      body: '16px',
+      bodyLarge: '18px',
+      titleSm: '20px',
+      titleMd: '24px',
+      titleLg: '32px',
+      display: '40px',
+    },
+    lineHeights: {
+      caption: 1.4,
+      bodySmall: 1.5,
+      body: 1.6,
+      bodyLarge: 1.6,
+      titleSm: 1.35,
+      titleMd: 1.3,
+      titleLg: 1.2,
+      display: 1.08,
+    },
+    weights: {
+      regular: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700,
+    },
+  },
   shadows: {
+    none: 'none',
     sm: '0 2px 8px rgba(15, 23, 42, 0.08)',
     md: '0 8px 24px rgba(15, 23, 42, 0.12)',
+    lg: '0 16px 40px rgba(15, 23, 42, 0.14)',
   },
   layout: {
     container: '1200px',
     readable: '720px',
     headerHeight: '72px',
+    widths: {
+      sm: '640px',
+      md: '840px',
+      lg: '1024px',
+      xl: '1200px',
+      full: '100%',
+    },
+  },
+  sizes: {
+    control: {
+      sm: '36px',
+      md: '44px',
+      lg: '48px',
+    },
+    media: {
+      productCard: '176px',
+      highlightMin: '260px',
+    },
+    sidebar: {
+      md: '280px',
+    },
   },
   breakpoints: {
     mobile: '480px',
     tablet: '768px',
     desktop: '1024px',
     wide: '1280px',
+  },
+  transitions: {
+    duration: {
+      fast: '120ms',
+      base: '160ms',
+      slow: '220ms',
+    },
+    easing: {
+      standard: 'ease',
+    },
+    default: '160ms ease',
+  },
+  zIndex: {
+    base: 0,
+    sticky: 5,
+    header: 10,
+    overlay: 20,
+    modal: 30,
   },
 };
