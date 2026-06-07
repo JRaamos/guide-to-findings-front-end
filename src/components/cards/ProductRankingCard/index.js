@@ -16,14 +16,13 @@ export function ProductRankingCard({ item, page }) {
     summary,
     imageUrl,
     imageAlt,
+    imageFallback,
     price,
     oldPrice,
     ratingLabel,
     topPros,
     mainCon,
-    highlight,
     recommendationLabel,
-    marketplaceName,
     ctaText,
     affiliateUrl,
     hasAffiliateUrl,
@@ -31,28 +30,27 @@ export function ProductRankingCard({ item, page }) {
   } = useController(item, page);
 
   return (
-    <S.Card as="article" variant="interactive">
-      <S.MediaColumn>
-        <S.PositionLabel>#{position}</S.PositionLabel>
-        <S.ImageArea>
-          {imageUrl ? (
-            <S.ProductImage src={imageUrl} alt={imageAlt} loading="lazy" />
-          ) : (
-            <S.ImageFallback>Sem imagem</S.ImageFallback>
-          )}
-        </S.ImageArea>
-      </S.MediaColumn>
+    <S.Card as="article" variant="default">
+      <S.MediaArea>
+        <S.RankBadge>#{position}</S.RankBadge>
+        {imageUrl ? (
+          <S.ProductImage src={imageUrl} alt={imageAlt} loading="lazy" />
+        ) : (
+          <S.ImageFallback aria-label={`Imagem indisponível para ${title}`}>
+            <S.ImageFallbackMark>{imageFallback.initials}</S.ImageFallbackMark>
+            <S.ImageFallbackText>{imageFallback.label}</S.ImageFallbackText>
+          </S.ImageFallback>
+        )}
+      </S.MediaArea>
 
       <S.Content>
-        <S.HeaderLine>
+        <S.MetaLine>
           {recommendationLabel ? <Badge variant="primary">{recommendationLabel}</Badge> : null}
           {availability ? <Badge variant={availabilityVariant}>{availability}</Badge> : null}
-        </S.HeaderLine>
-
+        </S.MetaLine>
         <S.Title>{title}</S.Title>
         {brand ? <S.Brand>{brand}</S.Brand> : null}
         {summary ? <S.Summary>{summary}</S.Summary> : null}
-        {highlight ? <S.Highlight>{highlight}</S.Highlight> : null}
 
         {(topPros.length > 0 || mainCon) && (
           <S.SignalList>
@@ -64,11 +62,10 @@ export function ProductRankingCard({ item, page }) {
         )}
       </S.Content>
 
-      <S.ActionArea>
+      <S.BuyBox>
         {price ? <S.Price>{price}</S.Price> : null}
         {oldPrice ? <S.OldPrice>{oldPrice}</S.OldPrice> : null}
         {ratingLabel ? <S.ActionMeta>{ratingLabel}</S.ActionMeta> : null}
-        {marketplaceName ? <S.ActionMeta>{marketplaceName}</S.ActionMeta> : null}
 
         {hasAffiliateUrl ? (
           <Button
@@ -86,7 +83,7 @@ export function ProductRankingCard({ item, page }) {
             {ctaText}
           </Button>
         )}
-      </S.ActionArea>
+      </S.BuyBox>
     </S.Card>
   );
 }

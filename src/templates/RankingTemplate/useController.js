@@ -2,8 +2,9 @@ import { trackClickEvent } from '@/services/analytics';
 import { trackAffiliateClick as trackGoogleAnalyticsAffiliateClick } from '@/services/analytics/googleAnalytics';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { formatDate } from '@/utils/formatDate';
+import { getProductImageFallback, getProductImageUrl } from '@/utils/productMedia';
 
-const highlightLabels = ['Melhor geral', 'Melhor custo-benefício', 'Melhor alternativa'];
+const highlightLabels = ['🏆 Melhor geral', '💰 Melhor custo-benefício', '⭐ Melhor alternativa'];
 const semanticSectionLabels = {
   topPicks: ['top picks do ranking', 'top picks'],
   comparison: ['comparativo rapido', 'comparativo rápido', 'comparacao rapida', 'comparação rápida'],
@@ -197,44 +198,27 @@ function buildSchemaJson(schemaData) {
 function buildHighlight(item, index, semanticPick) {
   const product = getProduct(item);
   const affiliateLink = getAffiliateLink(item);
+  const pros = Array.isArray(item?.pros) ? item.pros : [];
+  const cons = Array.isArray(item?.cons) ? item.cons : [];
 
   return {
     id: semanticPick?.id || item?.id || item?.position || index,
-    label: semanticPick?.label || highlightLabels[index] || 'Destaque',
+    label: highlightLabels[index] || semanticPick?.label || 'Destaque',
     position: item?.position || index + 1,
     title: getProductTitle(item),
     brand: product?.brand || '',
-    imageUrl: product?.imageUrl || '',
+    imageUrl: getProductImageUrl(product),
+    imageFallback: getProductImageFallback(product, getProductTitle(item)),
     price: getPriceLabel(product),
     rating: getRatingLabel(product),
     availability: getAvailabilityLabel(product),
     reason: semanticPick?.reason || item?.highlight || item?.summary || '',
+    strengths: pros.slice(0, 2),
+    limitation: cons[0] || '',
     affiliateUrl: affiliateLink?.affiliateUrl || '',
     ctaText: item?.ctaText || 'Ver oferta',
     item,
   };
-}
-
-function getBestForLabel(index, semanticLabel) {
-  if (semanticLabel) {
-    return semanticLabel.replace(/^melhor\s*/i, '').trim() || semanticLabel;
-  }
-
-  const labels = ['Melhor escolha', 'Custo-benefício', 'Alternativa'];
-  return labels[index] || 'Comparar';
-}
-
-function buildDecisionRows(topHighlights) {
-  return topHighlights.slice(0, 3).map((highlight, index) => ({
-    id: highlight.id,
-    title: highlight.title,
-    rating: highlight.rating,
-    bestFor: getBestForLabel(index, highlight.label),
-    price: highlight.price,
-    affiliateUrl: highlight.affiliateUrl,
-    ctaText: highlight.ctaText,
-    item: highlight.item,
-  }));
 }
 
 function buildTopHighlights(rankingItems, semanticTopPicks) {
@@ -245,81 +229,23 @@ function buildTopHighlights(rankingItems, semanticTopPicks) {
   return rankingItems.slice(0, 3).map(buildHighlight);
 }
 
-function buildQuickSummary(rankingItems, semanticTopPicks) {
-  if (semanticTopPicks.length > 0) {
-    return semanticTopPicks.map((pick) => ({
-      label: pick.label,
-      title: getProductTitle(pick.item),
-      position: pick.item?.position || '-',
-      highlight: pick.reason || pick.item?.highlight || '',
-    }));
-  }
-
-  const summarySource = [
-    ['Melhor geral', rankingItems[0]],
-    ['Melhor custo-benefício', rankingItems[1] || rankingItems[0]],
-    ['Melhor para uso profissional', rankingItems[2] || rankingItems[0]],
-    ['Melhor para uso básico', rankingItems[3] || rankingItems[1] || rankingItems[0]],
-  ];
-
-  return summarySource
-    .filter(([, item]) => Boolean(item))
-    .map(([label, item]) => ({
-      label,
-      title: getProductTitle(item),
-      position: item?.position || '-',
-      highlight: item?.highlight || '',
-    }));
-}
-
-function buildExecutiveSummary(topHighlights, comparison) {
-  const bestChoice = topHighlights[0];
-  const costBenefit = topHighlights[1] || topHighlights[0];
-  const alternative = topHighlights[2] || topHighlights[1] || topHighlights[0];
-
+function buildMethodologyCards(methodology) {
   return [
     {
-      question: 'Qual comprar?',
-      answer: bestChoice
-        ? `${bestChoice.title} é a primeira opção do ranking${bestChoice.reason ? `: ${bestChoice.reason}` : '.'}`
-        : 'Use o ranking completo para comparar os produtos disponíveis.',
+      title: 'Preço',
+      text: 'Comparamos o valor atual e o custo-benefício aparente.',
     },
     {
-      question: 'Para quem é melhor?',
-      answer: costBenefit
-        ? `${costBenefit.title} se destaca como uma escolha equilibrada${costBenefit.reason ? `: ${costBenefit.reason}` : '.'}`
-        : 'Compare preço, disponibilidade e marca antes de decidir.',
+      title: 'Qualidade',
+      text: 'Consideramos marca, proposta de uso e características informadas.',
     },
     {
-      question: 'Quando escolher outra opção?',
-      answer: alternative
-        ? `${alternative.title} funciona como alternativa quando a prioridade muda${alternative.reason ? `: ${alternative.reason}` : '.'}`
-        : comparison || 'Escolha outra opção quando preço, estoque ou perfil de uso forem mais importantes.',
-    },
-  ].filter((item) => item.answer);
-}
-
-function buildTrustSignals(hasMethodology, hasComparison, updatedLabel) {
-  return [
-    {
-      label: 'Critérios claros',
-      text: hasMethodology
-        ? 'Metodologia editorial aplicada ao ranking.'
-        : 'Produtos organizados por relevância, preço e disponibilidade.',
+      title: 'Avaliações',
+      text: 'Usamos notas e volume de avaliações quando esses dados existem.',
     },
     {
-      label: 'Comparação prática',
-      text: hasComparison
-        ? 'Análise comparativa disponível antes da tabela.'
-        : 'Tabela com preço, marca, disponibilidade e posição.',
-    },
-    {
-      label: 'Transparência afiliada',
-      text: 'Os links de oferta podem gerar comissão sem custo adicional para você.',
-    },
-    {
-      label: updatedLabel ? 'Última atualização' : 'Decisão orientada',
-      text: updatedLabel || 'Resumo rápido para comparar antes de comprar.',
+      title: 'Disponibilidade',
+      text: methodology || 'Priorizamos produtos com oferta e dados suficientes para comparação.',
     },
   ];
 }
@@ -389,17 +315,6 @@ export function useController(page) {
     });
   }
 
-  const navItems = [
-    { href: '#resumo', label: 'Resumo' },
-    { href: '#ranking', label: 'Ranking' },
-    ...(semanticIntro.comparison || rankingItems.length > 0
-      ? [{ href: '#comparativo', label: 'Comparativo' }]
-      : []),
-    { href: '#metodologia', label: 'Como avaliamos' },
-    ...(faqs.length > 0 ? [{ href: '#faq', label: 'FAQ' }] : []),
-    ...(page?.conclusion ? [{ href: '#conclusao', label: 'Conclusão' }] : []),
-  ];
-
   return {
     title: page?.title || 'Ranking',
     excerpt: page?.excerpt || '',
@@ -415,12 +330,8 @@ export function useController(page) {
     primaryCtaText: primaryItem?.ctaText || 'Ver melhor opção',
     totalItems: rankingItems.length,
     topHighlights,
-    quickSummary: buildQuickSummary(rankingItems, semanticTopPicks),
-    executiveSummary: buildExecutiveSummary(topHighlights, comparison),
-    trustSignals: buildTrustSignals(Boolean(methodology), Boolean(comparison), updatedLabel),
-    decisionRows: buildDecisionRows(topHighlights),
+    methodologyCards: buildMethodologyCards(methodology),
     comparisonRows: rankingItems.map(buildComparisonRow),
-    navItems,
     rankingTitle: ranking.title || '',
     rankingDescription: ranking.description || '',
     rankingItems,

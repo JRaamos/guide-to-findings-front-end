@@ -2,13 +2,16 @@ import { trackClickEvent } from '@/services/analytics';
 import { trackAffiliateClick as trackGoogleAnalyticsAffiliateClick } from '@/services/analytics/googleAnalytics';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { getImageAlt } from '@/utils/getImageAlt';
+import { getProductImageFallback, getProductImageUrl } from '@/utils/productMedia';
 
 export function useController(item, page) {
   const product = item?.product || {};
   const affiliateLink = item?.affiliateLink || {};
   const affiliateUrl = item?.affiliateLink?.affiliateUrl || '';
   const title = item?.title || product.name || 'Produto do ranking';
+  const imageUrl = getProductImageUrl(product);
   const imageAlt = getImageAlt(product, title);
+  const imageFallback = getProductImageFallback(product, title);
   const price = formatCurrency(product.price, product.currency || 'BRL');
   const oldPrice = formatCurrency(product.oldPrice, product.currency || 'BRL');
   const rating = product.rating === null || product.rating === undefined ? '' : `${product.rating}`;
@@ -67,8 +70,9 @@ export function useController(item, page) {
     availability,
     availabilityVariant,
     summary: item?.summary || '',
-    imageUrl: product.imageUrl || '',
+    imageUrl,
     imageAlt,
+    imageFallback,
     price,
     oldPrice,
     rating,

@@ -6,27 +6,18 @@ export const Container = styled.article`
 `;
 
 export const Hero = styled.header`
-  display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(420px, 1.08fr);
-  gap: ${({ theme }) => theme.spacing.xl};
-  align-items: start;
   width: min(100%, ${({ theme }) => theme.layout.container});
   margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing.lg}
-    ${({ theme }) => theme.spacing.lg};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
-    grid-template-columns: 1fr;
-  }
+  padding: ${({ theme }) => theme.spacing.xxl} ${({ theme }) => theme.spacing.lg}
+    ${({ theme }) => theme.spacing.xl};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    gap: ${({ theme }) => theme.spacing.lg};
-    padding: ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.md};
+    padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing.md};
   }
 `;
 
-export const HeroContent = styled.div`
-  min-width: 0;
+export const HeroIntro = styled.div`
+  max-width: 820px;
 `;
 
 export const Breadcrumbs = styled.nav`
@@ -57,7 +48,6 @@ export const BreadcrumbItem = styled.span`
 
 export const BreadcrumbLink = styled.a`
   color: ${({ theme }) => theme.colors.textSecondary};
-  font-weight: ${({ theme }) => theme.fontWeights.medium};
 
   &:hover,
   &:focus-visible {
@@ -69,7 +59,7 @@ export const BreadcrumbCurrent = styled.span`
   color: ${({ theme }) => theme.colors.textMuted};
 `;
 
-export const HeroBadges = styled.div`
+export const HeroMeta = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing.sm};
@@ -77,25 +67,25 @@ export const HeroBadges = styled.div`
 `;
 
 export const Title = styled.h1`
-  max-width: 760px;
   margin: 0;
   color: ${({ theme }) => theme.colors.textPrimary};
   font-size: ${({ theme }) => theme.fontSizes.heading};
   line-height: ${({ theme }) => theme.typography.lineHeights.display};
+  letter-spacing: 0;
   overflow-wrap: anywhere;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     font-size: ${({ theme }) => theme.fontSizes.titleLg};
-    line-height: ${({ theme }) => theme.typography.lineHeights.titleLg};
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     font-size: ${({ theme }) => theme.fontSizes.xl};
+    line-height: ${({ theme }) => theme.typography.lineHeights.titleMd};
   }
 `;
 
 export const Description = styled.p`
-  max-width: 680px;
+  max-width: 720px;
   margin: ${({ theme }) => theme.spacing.md} 0 0;
   color: ${({ theme }) => theme.colors.textSecondary};
   font-size: ${({ theme }) => theme.fontSizes.bodyLarge};
@@ -106,126 +96,120 @@ export const Description = styled.p`
   }
 `;
 
-export const HeroMeta = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.sm};
-  margin-top: ${({ theme }) => theme.spacing.md};
-`;
-
-export const MetaPill = styled.span`
-  display: inline-flex;
-  align-items: center;
-  min-height: 30px;
-  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.md};
-  color: ${({ theme }) => theme.colors.textSecondary};
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.pill};
+export const TransparencyText = styled.p`
+  max-width: 680px;
+  margin: ${({ theme }) => theme.spacing.md} 0 0;
+  color: ${({ theme }) => theme.colors.textMuted};
   font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  line-height: 1.55;
 `;
 
-export const HeroActions = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+export const TopPicks = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: ${({ theme }) => theme.spacing.lg};
+  margin-top: ${({ theme }) => theme.spacing.xl};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
+    grid-template-columns: 1fr;
+    gap: ${({ theme }) => theme.spacing.md};
+  }
+`;
+
+export const TopPick = styled.article`
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
   gap: ${({ theme }) => theme.spacing.md};
   align-items: center;
-  margin-top: ${({ theme }) => theme.spacing.lg};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    align-items: stretch;
-    flex-direction: column;
-  }
-`;
-
-export const HeroAnchor = styled.a`
-  color: ${({ theme }) => theme.colors.textPrimary};
-  font-weight: ${({ theme }) => theme.fontWeights.semibold};
-
-  &:hover,
-  &:focus-visible {
-    color: ${({ theme }) => theme.colors.primary};
-  }
-`;
-
-export const HeroTopPicks = styled.div`
-  display: grid;
-  gap: ${({ theme }) => theme.spacing.sm};
+  min-width: 0;
   padding: ${({ theme }) => theme.spacing.md};
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
-  box-shadow: ${({ theme }) => theme.shadows.sm};
-`;
 
-export const HeroTopPicksTitle = styled.h2`
-  margin: 0 0 ${({ theme }) => theme.spacing.xs};
-  color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.lg};
-  line-height: 1.25;
-`;
-
-export const HeroPick = styled.article`
-  display: grid;
-  grid-template-columns: 74px minmax(0, 1fr) auto;
-  gap: ${({ theme }) => theme.spacing.md};
-  align-items: center;
-  min-width: 0;
-  padding: ${({ theme }) => theme.spacing.sm};
-  background: ${({ theme }) => theme.colors.surfaceAlt};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
+    grid-template-columns: 96px minmax(0, 1fr) auto;
+  }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    grid-template-columns: 64px minmax(0, 1fr);
-
-    > a {
-      grid-column: 1 / -1;
-      width: 100%;
-    }
+    grid-template-columns: 82px minmax(0, 1fr);
   }
 `;
 
-export const HeroPickMedia = styled.div`
+export const TopPickMedia = styled.div`
   display: grid;
   place-items: center;
-  width: 74px;
-  height: 74px;
+  width: 104px;
+  height: 104px;
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.surfaceAlt};
   border-radius: ${({ theme }) => theme.radius.sm};
 
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
+    width: 96px;
+    height: 96px;
+  }
+
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    width: 64px;
-    height: 64px;
+    width: 82px;
+    height: 82px;
   }
 `;
 
-export const HeroPickImage = styled.img`
+export const TopPickImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: contain;
 `;
 
-export const HeroPickFallback = styled.span`
-  color: ${({ theme }) => theme.colors.textMuted};
-  font-size: ${({ theme }) => theme.fontSizes.xs};
+export const ImageFallback = styled.div`
+  display: grid;
+  place-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+  width: 100%;
+  height: 100%;
+  padding: ${({ theme }) => theme.spacing.sm};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  text-align: center;
+  background: ${({ theme }) => theme.colors.surfaceStrong};
 `;
 
-export const HeroPickContent = styled.div`
+export const ImageFallbackMark = styled.span`
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.borderColor.strong};
+  border-radius: ${({ theme }) => theme.radius.pill};
+  font-size: ${({ theme }) => theme.fontSizes.md};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+`;
+
+export const ImageFallbackText = styled.span`
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  line-height: 1.25;
+`;
+
+export const TopPickBody = styled.div`
   min-width: 0;
 `;
 
-export const HeroPickLabel = styled.p`
+export const TopPickLabel = styled.p`
   margin: 0;
-  color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.colors.primary};
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
 `;
 
-export const HeroPickTitle = styled.h3`
+export const TopPickTitle = styled.h2`
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -233,185 +217,41 @@ export const HeroPickTitle = styled.h3`
   overflow-wrap: anywhere;
   margin: ${({ theme }) => theme.spacing.xs} 0 0;
   color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.md};
-  line-height: 1.3;
+  font-size: ${({ theme }) => theme.fontSizes.lg};
+  line-height: 1.25;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    font-size: ${({ theme }) => theme.fontSizes.md};
+  }
 `;
 
-export const HeroPickMeta = styled.p`
+export const TopPickMeta = styled.p`
   display: flex;
   flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing.sm};
-  margin: ${({ theme }) => theme.spacing.xs} 0 0;
+  margin: ${({ theme }) => theme.spacing.sm} 0 0;
   color: ${({ theme }) => theme.colors.textMuted};
   font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.medium};
-`;
 
-export const HeroChoiceMeta = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.colors.textMuted};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-`;
-
-export const DecisionTableSection = styled.section`
-  display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
-  gap: ${({ theme }) => theme.spacing.lg};
-  align-items: start;
-  width: min(100%, ${({ theme }) => theme.layout.container});
-  margin: 0 auto;
-  padding: 0 ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.lg};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    grid-template-columns: 1fr;
-  }
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    padding-inline: ${({ theme }) => theme.spacing.md};
-  }
-`;
-
-export const DecisionTableHeader = styled.div`
-  padding-top: ${({ theme }) => theme.spacing.sm};
-`;
-
-export const DecisionTableEyebrow = styled.p`
-  margin: 0 0 ${({ theme }) => theme.spacing.xs};
-  color: ${({ theme }) => theme.colors.primary};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
-`;
-
-export const DecisionTableTitle = styled.h2`
-  margin: 0;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.lg};
-  line-height: 1.25;
-`;
-
-export const DecisionTableScroller = styled.div`
-  width: 100%;
-  overflow-x: auto;
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
-`;
-
-export const DecisionTable = styled.table`
-  width: 100%;
-  min-width: 640px;
-  border-collapse: collapse;
-
-  th,
-  td {
-    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
-    text-align: left;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-    vertical-align: middle;
-  }
-
-  th {
+  strong {
     color: ${({ theme }) => theme.colors.textPrimary};
-    background: ${({ theme }) => theme.colors.surfaceAlt};
-    font-size: ${({ theme }) => theme.fontSizes.sm};
-    font-weight: ${({ theme }) => theme.fontWeights.bold};
-  }
-
-  td {
-    color: ${({ theme }) => theme.colors.textSecondary};
-    font-size: ${({ theme }) => theme.fontSizes.sm};
-  }
-
-  tbody tr:last-child td {
-    border-bottom: 0;
-  }
-
-  td:first-child {
-    color: ${({ theme }) => theme.colors.textPrimary};
-    font-weight: ${({ theme }) => theme.fontWeights.semibold};
-    overflow-wrap: anywhere;
   }
 `;
 
-export const TrustStrip = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: ${({ theme }) => theme.spacing.md};
-  width: min(100%, ${({ theme }) => theme.layout.container});
-  margin: 0 auto;
-  padding: 0 ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.xl};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    grid-template-columns: 1fr;
-  }
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    padding-inline: ${({ theme }) => theme.spacing.md};
-  }
-`;
-
-export const TrustStripItem = styled.div`
-  padding-top: ${({ theme }) => theme.spacing.md};
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
-`;
-
-export const TrustSignalLabel = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
-`;
-
-export const TrustSignalText = styled.p`
-  margin: ${({ theme }) => theme.spacing.xs} 0 0;
-  color: ${({ theme }) => theme.colors.textMuted};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  line-height: 1.45;
-`;
-
-export const MobileNav = styled.nav`
-  display: none;
-  width: 100%;
-  background: ${({ theme }) => theme.colors.surface};
-  border-block: 1px solid ${({ theme }) => theme.colors.border};
+export const TopPickAction = styled.div`
+  grid-column: 1 / -1;
+  min-width: 0;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
-    display: block;
+    grid-column: auto;
+    justify-self: end;
+    min-width: 136px;
   }
-`;
-
-export const MobileNavInner = styled.div`
-  display: flex;
-  gap: ${({ theme }) => theme.spacing.sm};
-  width: min(100%, ${({ theme }) => theme.layout.container});
-  margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.lg};
-  overflow-x: auto;
-  scrollbar-width: thin;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    padding-inline: ${({ theme }) => theme.spacing.md};
-  }
-`;
-
-export const MobileNavLink = styled.a`
-  flex: 0 0 auto;
-  min-height: 34px;
-  display: inline-flex;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.md};
-  color: ${({ theme }) => theme.colors.textSecondary};
-  background: ${({ theme }) => theme.colors.surfaceAlt};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.pill};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.semibold};
-  white-space: nowrap;
-
-  &:hover,
-  &:focus-visible {
-    color: ${({ theme }) => theme.colors.primary};
-    border-color: ${({ theme }) => theme.colors.primary};
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    min-width: 0;
   }
 `;
 
@@ -422,15 +262,15 @@ export const Body = styled.div`
     ${({ theme }) => theme.spacing.xxxl};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing.md}
+    padding: ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.md}
       ${({ theme }) => theme.spacing.xxl};
   }
 `;
 
 export const ContentGrid = styled.div`
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 240px;
-  gap: ${({ theme }) => theme.spacing.xl};
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: ${({ theme }) => theme.spacing.xxl};
   align-items: start;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
@@ -447,8 +287,13 @@ export const Section = styled.section`
   scroll-margin-top: calc(${({ theme }) => theme.layout.headerHeight} + ${({ theme }) => theme.spacing.lg});
 
   & + & {
-    margin-top: ${({ theme }) => theme.spacing.xxl};
+    margin-top: ${({ theme }) => theme.spacing.xxxl};
   }
+`;
+
+export const SectionHeader = styled.div`
+  max-width: ${({ theme }) => theme.layout.readable};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;
 
 export const SectionEyebrow = styled.p`
@@ -459,7 +304,6 @@ export const SectionEyebrow = styled.p`
 `;
 
 export const SectionTitle = styled.h2`
-  max-width: ${({ theme }) => theme.layout.readable};
   margin: 0;
   color: ${({ theme }) => theme.colors.textPrimary};
   font-size: ${({ theme }) => theme.fontSizes.xl};
@@ -471,7 +315,6 @@ export const SectionTitle = styled.h2`
 `;
 
 export const SectionText = styled.p`
-  max-width: ${({ theme }) => theme.layout.readable};
   margin: ${({ theme }) => theme.spacing.md} 0 0;
   color: ${({ theme }) => theme.colors.textSecondary};
   line-height: ${({ theme }) => theme.typography.lineHeights.body};
@@ -495,87 +338,11 @@ export const RichText = styled.div`
     color: ${({ theme }) => theme.colors.textPrimary};
     font-weight: ${({ theme }) => theme.fontWeights.semibold};
   }
-
-  a {
-    color: ${({ theme }) => theme.colors.primary};
-    font-weight: ${({ theme }) => theme.fontWeights.medium};
-  }
-`;
-
-export const ExecutiveSummaryGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: ${({ theme }) => theme.spacing.md};
-  margin-top: ${({ theme }) => theme.spacing.lg};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-export const ExecutiveSummaryItem = styled.article`
-  padding: ${({ theme }) => theme.spacing.md};
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
-`;
-
-export const ExecutiveSummaryQuestion = styled.h3`
-  margin: 0;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.md};
-  line-height: 1.35;
-`;
-
-export const ExecutiveSummaryAnswer = styled.p`
-  margin: ${({ theme }) => theme.spacing.sm} 0 0;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.55;
-`;
-
-export const QuickSummaryGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: ${({ theme }) => theme.spacing.md};
-  margin-top: ${({ theme }) => theme.spacing.lg};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-export const QuickSummaryItem = styled.article`
-  padding: ${({ theme }) => theme.spacing.md};
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
-`;
-
-export const QuickSummaryLabel = styled.p`
-  margin: 0 0 ${({ theme }) => theme.spacing.sm};
-  color: ${({ theme }) => theme.colors.secondary};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
-`;
-
-export const QuickSummaryTitle = styled.h3`
-  margin: 0;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.lg};
-  line-height: 1.3;
-  overflow-wrap: anywhere;
-`;
-
-export const QuickSummaryText = styled.p`
-  margin: ${({ theme }) => theme.spacing.sm} 0 0;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.55;
 `;
 
 export const RankingList = styled.div`
   display: grid;
-  gap: ${({ theme }) => theme.spacing.md};
-  margin-top: ${({ theme }) => theme.spacing.lg};
+  gap: ${({ theme }) => theme.spacing.xl};
 `;
 
 export const EmptyState = styled.p`
@@ -589,21 +356,20 @@ export const EmptyState = styled.p`
 
 export const TableScroller = styled.div`
   width: 100%;
-  margin-top: ${({ theme }) => theme.spacing.lg};
   overflow-x: auto;
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
 `;
 
 export const ComparisonTable = styled.table`
   width: 100%;
   min-width: 760px;
   border-collapse: collapse;
+  background: ${({ theme }) => theme.colors.surface};
+  border-radius: ${({ theme }) => theme.radius.md};
+  overflow: hidden;
 
   th,
   td {
-    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+    padding: ${({ theme }) => theme.spacing.md};
     text-align: left;
     border-bottom: 1px solid ${({ theme }) => theme.colors.border};
     vertical-align: middle;
@@ -637,56 +403,52 @@ export const TableUnavailable = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.sm};
 `;
 
-export const CriteriaList = styled.ul`
+export const MethodologyGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: ${({ theme }) => theme.spacing.md};
-  max-width: 920px;
-  margin: ${({ theme }) => theme.spacing.lg} 0 0;
-  padding: 0;
-  list-style: none;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     grid-template-columns: 1fr;
   }
 `;
 
-export const CriteriaItem = styled.li`
-  padding: ${({ theme }) => theme.spacing.md};
-  color: ${({ theme }) => theme.colors.textSecondary};
+export const MethodologyCard = styled.article`
+  padding: ${({ theme }) => theme.spacing.lg};
   background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-left: 4px solid ${({ theme }) => theme.colors.secondary};
+  border-top: 3px solid ${({ theme }) => theme.colors.highlight};
   border-radius: ${({ theme }) => theme.radius.md};
-  line-height: 1.55;
 `;
 
-export const TransparencyNote = styled.p`
-  max-width: ${({ theme }) => theme.layout.readable};
-  margin: ${({ theme }) => theme.spacing.lg} 0 0;
-  padding: ${({ theme }) => theme.spacing.md};
+export const MethodologyTitle = styled.h3`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  font-size: ${({ theme }) => theme.fontSizes.md};
+`;
+
+export const MethodologyText = styled.p`
+  margin: ${({ theme }) => theme.spacing.sm} 0 0;
   color: ${({ theme }) => theme.colors.textSecondary};
-  background: ${({ theme }) => theme.colors.surfaceAlt};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
-  line-height: 1.6;
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  line-height: 1.55;
 `;
 
 export const FaqList = styled.div`
   display: grid;
   gap: ${({ theme }) => theme.spacing.md};
   max-width: ${({ theme }) => theme.layout.readable};
-  margin-top: ${({ theme }) => theme.spacing.lg};
 `;
 
 export const FaqItem = styled.details`
-  padding: ${({ theme }) => theme.spacing.lg};
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
+  padding: ${({ theme }) => theme.spacing.lg} 0;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 
-  &[open] {
-    border-color: ${({ theme }) => theme.colors.primary};
+  &:last-child {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   }
 `;
 
@@ -708,7 +470,7 @@ export const FinalAction = styled.div`
 
 export const Sidebar = styled.aside`
   position: sticky;
-  top: calc(${({ theme }) => theme.layout.headerHeight} + ${({ theme }) => theme.spacing.lg});
+  top: calc(${({ theme }) => theme.layout.headerHeight} + ${({ theme }) => theme.spacing.xl});
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
     display: none;
@@ -716,22 +478,18 @@ export const Sidebar = styled.aside`
 `;
 
 export const SidebarBox = styled.div`
+  display: grid;
+  gap: ${({ theme }) => theme.spacing.md};
   padding: ${({ theme }) => theme.spacing.md};
   background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
 `;
 
-export const SidebarTitle = styled.h2`
-  margin: 0 0 ${({ theme }) => theme.spacing.md};
-  color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.md};
-  line-height: 1.3;
-`;
-
-export const SidebarBest = styled.div`
-  display: grid;
-  gap: ${({ theme }) => theme.spacing.sm};
+export const SidebarLabel = styled.p`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
 `;
 
 export const SidebarBestMedia = styled.div`
@@ -741,7 +499,6 @@ export const SidebarBestMedia = styled.div`
   aspect-ratio: 4 / 3;
   overflow: hidden;
   background: ${({ theme }) => theme.colors.surfaceAlt};
-  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.sm};
 `;
 
@@ -769,16 +526,4 @@ export const SidebarPrice = styled.p`
   color: ${({ theme }) => theme.colors.textPrimary};
   font-size: ${({ theme }) => theme.fontSizes.lg};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
-`;
-
-export const SidebarSummary = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.md};
-  padding-top: ${({ theme }) => theme.spacing.md};
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
-`;
-
-export const SidebarMeta = styled.p`
-  margin: ${({ theme }) => theme.spacing.xs} 0 0;
-  color: ${({ theme }) => theme.colors.textMuted};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
 `;
