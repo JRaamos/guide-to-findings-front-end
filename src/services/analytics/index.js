@@ -22,4 +22,5 @@ export {
   trackPageView,
   trackEvent,
   trackAffiliateClick as trackGoogleAnalyticsAffiliateClick,
+  trackProductImageOpen,
 } from './googleAnalytics';

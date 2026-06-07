@@ -12,9 +12,7 @@ export const Card = styled(BaseCard)`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.lg};
-  box-shadow:
-    0 10px 24px rgba(17, 24, 39, 0.06),
-    0 2px 6px rgba(17, 24, 39, 0.04);
+  box-shadow: ${({ theme }) => theme.shadows.md};
   transition:
     border-color ${({ theme }) => theme.transitions.default},
     box-shadow ${({ theme }) => theme.transitions.default},
@@ -22,9 +20,7 @@ export const Card = styled(BaseCard)`
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.borderColor.strong};
-    box-shadow:
-      0 18px 36px rgba(17, 24, 39, 0.09),
-      0 6px 12px rgba(17, 24, 39, 0.05);
+    box-shadow: ${({ theme }) => theme.shadows.lg};
     transform: translateY(-2px);
   }
 
@@ -47,8 +43,9 @@ export const MediaArea = styled.div`
   width: 100%;
   aspect-ratio: 1;
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.surfaceAlt};
+  background: ${({ theme }) => theme.colors.surface};
   border-radius: ${({ theme }) => theme.radius.md};
+  box-shadow: inset 0 0 0 1px ${({ theme }) => theme.colors.borderColor.default};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     aspect-ratio: 16 / 10;
@@ -58,6 +55,7 @@ export const MediaArea = styled.div`
 
 export const RankBadge = styled.span`
   position: absolute;
+  z-index: 1;
   top: ${({ theme }) => theme.spacing.sm};
   left: ${({ theme }) => theme.spacing.sm};
   display: inline-flex;
@@ -69,45 +67,6 @@ export const RankBadge = styled.span`
   border-radius: ${({ theme }) => theme.radius.pill};
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
-`;
-
-export const ProductImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-`;
-
-export const ImageFallback = styled.div`
-  display: grid;
-  place-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
-  width: 100%;
-  height: 100%;
-  padding: ${({ theme }) => theme.spacing.md};
-  color: ${({ theme }) => theme.colors.textSecondary};
-  text-align: center;
-  background: ${({ theme }) => theme.colors.surfaceStrong};
-`;
-
-export const ImageFallbackMark = styled.span`
-  display: inline-grid;
-  place-items: center;
-  width: 58px;
-  height: 58px;
-  color: ${({ theme }) => theme.colors.primary};
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.borderColor.strong};
-  border-radius: ${({ theme }) => theme.radius.pill};
-  font-size: ${({ theme }) => theme.fontSizes.lg};
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
-`;
-
-export const ImageFallbackText = styled.span`
-  max-width: 130px;
-  color: ${({ theme }) => theme.colors.textMuted};
-  font-size: ${({ theme }) => theme.fontSizes.xs};
-  font-weight: ${({ theme }) => theme.fontWeights.medium};
-  line-height: 1.35;
 `;
 
 export const Content = styled.div`
@@ -124,7 +83,7 @@ export const MetaLine = styled.div`
 export const Title = styled.h3`
   margin: 0;
   color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.xl};
+  font-size: ${({ theme }) => theme.typography.sizes.titleMd};
   line-height: ${({ theme }) => theme.typography.lineHeights.titleMd};
   overflow-wrap: anywhere;
 
@@ -147,6 +106,7 @@ export const Summary = styled.p`
   overflow: hidden;
   margin: ${({ theme }) => theme.spacing.md} 0 0;
   color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: ${({ theme }) => theme.typography.sizes.body};
   line-height: ${({ theme }) => theme.typography.lineHeights.body};
   overflow-wrap: anywhere;
 `;
@@ -212,7 +172,7 @@ export const BuyBox = styled.div`
 export const Price = styled.p`
   margin: 0;
   color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.xl};
+  font-size: ${({ theme }) => theme.typography.sizes.titleMd};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   line-height: 1.2;
 `;

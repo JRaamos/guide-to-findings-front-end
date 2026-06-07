@@ -84,8 +84,37 @@ function getPriceLabel(product) {
   return formatCurrency(product?.price, product?.currency || 'BRL');
 }
 
+function getSavingsLabel(product) {
+  const price = Number(product?.price);
+  const oldPrice = Number(product?.oldPrice);
+
+  if (!Number.isFinite(price) || !Number.isFinite(oldPrice) || oldPrice <= price) {
+    return '';
+  }
+
+  return `Economize ${formatCurrency(oldPrice - price, product?.currency || 'BRL')}`;
+}
+
 function getRatingLabel(product) {
   return product?.rating === null || product?.rating === undefined ? '' : `${product.rating}`;
+}
+
+function getReviewCountLabel(product) {
+  if (product?.reviewCount === null || product?.reviewCount === undefined) {
+    return '';
+  }
+
+  return `${new Intl.NumberFormat('pt-BR').format(product.reviewCount)} avaliações`;
+}
+
+function getCtaText(value) {
+  const text = normalizeText(value);
+
+  if (!text || /ver oferta|mercado livre/i.test(text)) {
+    return 'Ver oferta no Mercado Livre';
+  }
+
+  return text;
 }
 
 function getAvailabilityLabel(product) {
@@ -206,17 +235,22 @@ function buildHighlight(item, index, semanticPick) {
     label: highlightLabels[index] || semanticPick?.label || 'Destaque',
     position: item?.position || index + 1,
     title: getProductTitle(item),
+    productId: product?.id,
+    productName: product?.name || getProductTitle(item),
     brand: product?.brand || '',
     imageUrl: getProductImageUrl(product),
     imageFallback: getProductImageFallback(product, getProductTitle(item)),
     price: getPriceLabel(product),
+    savings: getSavingsLabel(product),
     rating: getRatingLabel(product),
+    reviewCount: getReviewCountLabel(product),
     availability: getAvailabilityLabel(product),
     reason: semanticPick?.reason || item?.highlight || item?.summary || '',
     strengths: pros.slice(0, 2),
     limitation: cons[0] || '',
+    endorsement: index === 0 ? 'Recomendação da equipe' : '',
     affiliateUrl: affiliateLink?.affiliateUrl || '',
-    ctaText: item?.ctaText || 'Ver oferta',
+    ctaText: getCtaText(item?.ctaText),
     item,
   };
 }
@@ -232,21 +266,34 @@ function buildTopHighlights(rankingItems, semanticTopPicks) {
 function buildMethodologyCards(methodology) {
   return [
     {
+      icon: 'R$',
       title: 'Preço',
       text: 'Comparamos o valor atual e o custo-benefício aparente.',
     },
     {
+      icon: 'Q',
       title: 'Qualidade',
       text: 'Consideramos marca, proposta de uso e características informadas.',
     },
     {
+      icon: 'A',
       title: 'Avaliações',
       text: 'Usamos notas e volume de avaliações quando esses dados existem.',
     },
     {
+      icon: 'D',
       title: 'Disponibilidade',
-      text: methodology || 'Priorizamos produtos com oferta e dados suficientes para comparação.',
+      text: 'Priorizamos produtos com oferta e dados suficientes para comparação.',
     },
+  ];
+}
+
+function buildTrustItems(totalItems) {
+  return [
+    totalItems > 0 ? `${totalItems} produtos avaliados` : 'Produtos avaliados',
+    'Comparação editorial',
+    'Avaliações analisadas',
+    'Preços monitorados',
   ];
 }
 
@@ -262,7 +309,7 @@ function buildComparisonRow(item) {
     price: getPriceLabel(product),
     availability: getAvailabilityLabel(product),
     affiliateUrl: affiliateLink?.affiliateUrl || '',
-    ctaText: item?.ctaText || 'Ver oferta',
+    ctaText: getCtaText(item?.ctaText),
     item,
   };
 }
@@ -280,8 +327,9 @@ export function useController(page) {
   const primaryItem = rankingItems[0] || null;
   const primaryAffiliateUrl = getAffiliateLink(primaryItem)?.affiliateUrl || '';
   const sourcePageUrl = buildSourcePageUrl(page);
-  const updatedAt = page?.updatedAt || page?.publishedAt || page?.createdAt || '';
-  const updatedLabel = updatedAt ? formatDate(updatedAt) : '';
+  const updatedAt = page?.publishedAt || page?.approvedAt || '';
+  const updatedSource = page?.publishedAt ? 'publishedAt' : page?.approvedAt ? 'approvedAt' : 'fallback';
+  const updatedLabel = updatedAt ? formatDate(updatedAt) : 'Atualização editorial não informada';
   const categoryName = page?.category?.name || '';
   const topHighlights = buildTopHighlights(rankingItems, semanticTopPicks);
   const comparison = page?.comparison || semanticIntro.comparison || '';
@@ -325,12 +373,15 @@ export function useController(page) {
     breadcrumbs: Array.isArray(page?.breadcrumbs) ? page.breadcrumbs : [],
     categoryName,
     updatedLabel,
+    updatedSource,
     primaryItem,
     primaryAffiliateUrl,
-    primaryCtaText: primaryItem?.ctaText || 'Ver melhor opção',
+    primaryCtaText: getCtaText(primaryItem?.ctaText),
     totalItems: rankingItems.length,
+    trustItems: buildTrustItems(rankingItems.length),
     topHighlights,
     methodologyCards: buildMethodologyCards(methodology),
+    methodologyText: methodology,
     comparisonRows: rankingItems.map(buildComparisonRow),
     rankingTitle: ranking.title || '',
     rankingDescription: ranking.description || '',

@@ -9,6 +9,20 @@ function normalizeText(value) {
   return typeof value === 'string' ? value.trim() : '';
 }
 
+function getFirstPictureUrl(pictures) {
+  if (!Array.isArray(pictures)) {
+    return '';
+  }
+
+  const firstPicture = pictures.find(Boolean);
+
+  if (typeof firstPicture === 'string') {
+    return firstPicture;
+  }
+
+  return firstPicture?.url || firstPicture?.secureUrl || firstPicture?.src || '';
+}
+
 function isPlaceholderImageUrl(value) {
   return PLACEHOLDER_IMAGE_PATTERNS.some((pattern) => pattern.test(value));
 }
@@ -16,24 +30,20 @@ function isPlaceholderImageUrl(value) {
 export function getProductImageUrl(product = {}) {
   const candidates = [
     product.imageUrl,
+    product.thumbnail,
+    getFirstPictureUrl(product.pictures),
     product.thumbnailUrl,
     product.pictureUrl,
     product.marketplaceImage,
-    product.thumbnail,
-    product.picture,
     product.image?.url,
     product.media?.url,
-    Array.isArray(product.pictures) ? product.pictures[0]?.url || product.pictures[0] : '',
-    Array.isArray(product.gallery) ? product.gallery[0]?.url || product.gallery[0] : '',
+    product.picture,
+    getFirstPictureUrl(product.gallery),
   ];
 
-  const imageUrl = candidates.map(normalizeText).find(Boolean) || '';
-
-  if (!imageUrl || isPlaceholderImageUrl(imageUrl)) {
-    return '';
-  }
-
-  return imageUrl;
+  return candidates
+    .map(normalizeText)
+    .find((imageUrl) => imageUrl && !isPlaceholderImageUrl(imageUrl)) || '';
 }
 
 export function getProductImageFallback(product = {}, fallbackTitle = '') {

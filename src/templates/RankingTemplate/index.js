@@ -3,6 +3,7 @@
 import { ProductRankingCard } from '@/components/cards/ProductRankingCard';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { ProductImageMedia } from '@/components/ui/ProductImageMedia';
 
 import { useController } from './useController';
 import * as S from './styles';
@@ -16,10 +17,12 @@ export function RankingTemplate({ page }) {
     breadcrumbs,
     categoryName,
     updatedLabel,
+    updatedSource,
     primaryItem,
     primaryAffiliateUrl,
     primaryCtaText,
     totalItems,
+    trustItems,
     topHighlights,
     comparisonRows,
     rankingTitle,
@@ -27,6 +30,7 @@ export function RankingTemplate({ page }) {
     rankingItems,
     faqs,
     methodologyCards,
+    methodologyText,
     schemaJson,
     trackAffiliateClick,
   } = useController(page);
@@ -59,15 +63,15 @@ export function RankingTemplate({ page }) {
           <S.HeroMeta>
             {categoryName ? <Badge variant="primary">{categoryName}</Badge> : null}
             {totalItems > 0 ? <Badge variant="neutral">{totalItems} opções analisadas</Badge> : null}
-            {updatedLabel ? <Badge variant="neutral">Atualizado em {updatedLabel}</Badge> : null}
+            {updatedLabel ? (
+              <Badge variant="neutral">
+                {updatedSource === 'fallback' ? updatedLabel : `Atualizado em ${updatedLabel}`}
+              </Badge>
+            ) : null}
           </S.HeroMeta>
 
           <S.Title>{title}</S.Title>
           {excerpt ? <S.Description>{excerpt}</S.Description> : null}
-          <S.TransparencyText>
-            O Manual dos Achados pode receber comissão por compras feitas pelos links, sem custo
-            adicional para você.
-          </S.TransparencyText>
         </S.HeroIntro>
 
         {topHighlights.length > 0 ? (
@@ -75,21 +79,28 @@ export function RankingTemplate({ page }) {
             {topHighlights.map((highlight) => (
               <S.TopPick key={highlight.id}>
                 <S.TopPickMedia>
-                  {highlight.imageUrl ? (
-                    <S.TopPickImage src={highlight.imageUrl} alt={highlight.title} />
-                  ) : (
-                    <S.ImageFallback aria-label={`Imagem indisponível para ${highlight.title}`}>
-                      <S.ImageFallbackMark>{highlight.imageFallback.initials}</S.ImageFallbackMark>
-                      <S.ImageFallbackText>{highlight.imageFallback.label}</S.ImageFallbackText>
-                    </S.ImageFallback>
-                  )}
+                  <ProductImageMedia
+                    imageUrl={highlight.imageUrl}
+                    alt={highlight.title}
+                    fallback={highlight.imageFallback}
+                    productId={highlight.productId}
+                    productName={highlight.productName}
+                    rankingPosition={highlight.position}
+                    loading="eager"
+                    variant="compact"
+                  />
                 </S.TopPickMedia>
                 <S.TopPickBody>
                   <S.TopPickLabel>{highlight.label}</S.TopPickLabel>
+                  {highlight.endorsement ? (
+                    <S.TopPickEndorsement>{highlight.endorsement}</S.TopPickEndorsement>
+                  ) : null}
                   <S.TopPickTitle>{highlight.title}</S.TopPickTitle>
                   <S.TopPickMeta>
                     {highlight.rating ? <span>Nota {highlight.rating}</span> : null}
+                    {highlight.reviewCount ? <span>{highlight.reviewCount}</span> : null}
                     {highlight.price ? <strong>{highlight.price}</strong> : null}
+                    {highlight.savings ? <S.TopPickSavings>{highlight.savings}</S.TopPickSavings> : null}
                   </S.TopPickMeta>
                 </S.TopPickBody>
                 {highlight.affiliateUrl ? (
@@ -102,7 +113,7 @@ export function RankingTemplate({ page }) {
                       fullWidth
                       onClick={() => trackAffiliateClick(highlight.item)}
                     >
-                      Ver oferta
+                      {highlight.ctaText}
                     </Button>
                   </S.TopPickAction>
                 ) : null}
@@ -111,6 +122,21 @@ export function RankingTemplate({ page }) {
           </S.TopPicks>
         ) : null}
       </S.Hero>
+
+      <S.TrustLayer aria-label="Sinais de confiança editorial">
+        <S.TrustBar>
+          {trustItems.map((item) => (
+            <S.TrustItem key={item}>{item}</S.TrustItem>
+          ))}
+        </S.TrustBar>
+        <S.EditorialTransparency>
+          <S.TransparencyTitle>Como ganhamos dinheiro</S.TransparencyTitle>
+          <S.TransparencyText>
+            Alguns links desta página são afiliados. Isso não influencia nossa classificação; nosso
+            objetivo é recomendar os melhores produtos para cada perfil.
+          </S.TransparencyText>
+        </S.EditorialTransparency>
+      </S.TrustLayer>
 
       <S.Body>
         <S.ContentGrid>
@@ -169,7 +195,7 @@ export function RankingTemplate({ page }) {
                                 size="sm"
                                 onClick={() => trackAffiliateClick(row.item)}
                               >
-                                Ver oferta
+                                {row.ctaText}
                               </Button>
                             ) : (
                               <S.TableUnavailable>Indisponível</S.TableUnavailable>
@@ -191,11 +217,13 @@ export function RankingTemplate({ page }) {
               <S.MethodologyGrid>
                 {methodologyCards.map((card) => (
                   <S.MethodologyCard key={card.title}>
+                    <S.MethodologyIcon aria-hidden="true">{card.icon}</S.MethodologyIcon>
                     <S.MethodologyTitle>{card.title}</S.MethodologyTitle>
                     <S.MethodologyText>{card.text}</S.MethodologyText>
                   </S.MethodologyCard>
                 ))}
               </S.MethodologyGrid>
+              {methodologyText ? <S.MethodologyNote>{methodologyText}</S.MethodologyNote> : null}
             </S.Section>
 
             {faqs.length > 0 ? (
@@ -246,18 +274,14 @@ export function RankingTemplate({ page }) {
               <S.SidebarBox>
                 <S.SidebarLabel>🏆 Melhor escolha</S.SidebarLabel>
                 <S.SidebarBestMedia>
-                  {topHighlights[0].imageUrl ? (
-                    <S.SidebarBestImage
-                      src={topHighlights[0].imageUrl}
-                      alt={topHighlights[0].title}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <S.ImageFallback aria-label={`Imagem indisponível para ${topHighlights[0].title}`}>
-                      <S.ImageFallbackMark>{topHighlights[0].imageFallback.initials}</S.ImageFallbackMark>
-                      <S.ImageFallbackText>{topHighlights[0].imageFallback.label}</S.ImageFallbackText>
-                    </S.ImageFallback>
-                  )}
+                  <ProductImageMedia
+                    imageUrl={topHighlights[0].imageUrl}
+                    alt={topHighlights[0].title}
+                    fallback={topHighlights[0].imageFallback}
+                    productId={topHighlights[0].productId}
+                    productName={topHighlights[0].productName}
+                    rankingPosition={topHighlights[0].position}
+                  />
                 </S.SidebarBestMedia>
                 <S.SidebarProduct>{topHighlights[0].title}</S.SidebarProduct>
                 {topHighlights[0].price ? <S.SidebarPrice>{topHighlights[0].price}</S.SidebarPrice> : null}
@@ -270,7 +294,7 @@ export function RankingTemplate({ page }) {
                     fullWidth
                     onClick={() => trackAffiliateClick(topHighlights[0].item)}
                   >
-                    Ver oferta
+                    {topHighlights[0].ctaText}
                   </Button>
                 ) : null}
               </S.SidebarBox>

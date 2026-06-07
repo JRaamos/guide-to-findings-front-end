@@ -98,10 +98,10 @@ export const Description = styled.p`
 
 export const TransparencyText = styled.p`
   max-width: 680px;
-  margin: ${({ theme }) => theme.spacing.md} 0 0;
+  margin: 0;
   color: ${({ theme }) => theme.colors.textMuted};
   font-size: ${({ theme }) => theme.fontSizes.sm};
-  line-height: 1.55;
+  line-height: 1.6;
 `;
 
 export const TopPicks = styled.div`
@@ -126,6 +126,7 @@ export const TopPick = styled.article`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
     grid-template-columns: 96px minmax(0, 1fr) auto;
@@ -142,8 +143,9 @@ export const TopPickMedia = styled.div`
   width: 104px;
   height: 104px;
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.surfaceAlt};
+  background: ${({ theme }) => theme.colors.surface};
   border-radius: ${({ theme }) => theme.radius.sm};
+  box-shadow: inset 0 0 0 1px ${({ theme }) => theme.colors.borderColor.default};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
     width: 96px;
@@ -156,57 +158,31 @@ export const TopPickMedia = styled.div`
   }
 `;
 
-export const TopPickImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-`;
-
-export const ImageFallback = styled.div`
-  display: grid;
-  place-items: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-  width: 100%;
-  height: 100%;
-  padding: ${({ theme }) => theme.spacing.sm};
-  color: ${({ theme }) => theme.colors.textSecondary};
-  text-align: center;
-  background: ${({ theme }) => theme.colors.surfaceStrong};
-`;
-
-export const ImageFallbackMark = styled.span`
-  display: inline-grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  color: ${({ theme }) => theme.colors.primary};
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.borderColor.strong};
-  border-radius: ${({ theme }) => theme.radius.pill};
-  font-size: ${({ theme }) => theme.fontSizes.md};
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
-`;
-
-export const ImageFallbackText = styled.span`
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  color: ${({ theme }) => theme.colors.textMuted};
-  font-size: ${({ theme }) => theme.fontSizes.xs};
-  font-weight: ${({ theme }) => theme.fontWeights.medium};
-  line-height: 1.25;
-`;
-
 export const TopPickBody = styled.div`
   min-width: 0;
 `;
 
 export const TopPickLabel = styled.p`
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
   margin: 0;
+  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
   color: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.surfaceAlt};
+  border: 1px solid ${({ theme }) => theme.colors.borderColor.default};
+  border-radius: ${({ theme }) => theme.radius.pill};
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
+`;
+
+export const TopPickEndorsement = styled.p`
+  width: fit-content;
+  margin: ${({ theme }) => theme.spacing.xs} 0 0;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  letter-spacing: 0;
 `;
 
 export const TopPickTitle = styled.h2`
@@ -232,10 +208,16 @@ export const TopPickMeta = styled.p`
   margin: ${({ theme }) => theme.spacing.sm} 0 0;
   color: ${({ theme }) => theme.colors.textMuted};
   font-size: ${({ theme }) => theme.fontSizes.sm};
+  line-height: 1.5;
 
   strong {
     color: ${({ theme }) => theme.colors.textPrimary};
   }
+`;
+
+export const TopPickSavings = styled.span`
+  color: ${({ theme }) => theme.colors.accent};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
 `;
 
 export const TopPickAction = styled.div`
@@ -253,6 +235,77 @@ export const TopPickAction = styled.div`
     justify-self: stretch;
     min-width: 0;
   }
+`;
+
+export const TrustLayer = styled.section`
+  width: min(100%, ${({ theme }) => theme.layout.container});
+  margin: 0 auto;
+  padding: 0 ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.xl};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    padding: 0 ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  }
+`;
+
+export const TrustBar = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: ${({ theme }) => theme.spacing.sm};
+  padding: ${({ theme }) => theme.spacing.md};
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const TrustItem = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  min-width: 0;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  line-height: 1.45;
+
+  &::before {
+    content: '✓';
+    display: inline-grid;
+    flex: 0 0 auto;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    color: ${({ theme }) => theme.colors.primary};
+    background: ${({ theme }) => theme.colors.surfaceAlt};
+    border: 1px solid ${({ theme }) => theme.colors.borderColor.default};
+    border-radius: ${({ theme }) => theme.radius.pill};
+    font-size: ${({ theme }) => theme.fontSizes.xs};
+    font-weight: ${({ theme }) => theme.fontWeights.bold};
+  }
+`;
+
+export const EditorialTransparency = styled.div`
+  display: grid;
+  gap: ${({ theme }) => theme.spacing.xs};
+  max-width: ${({ theme }) => theme.layout.readable};
+  margin-top: ${({ theme }) => theme.spacing.md};
+  padding-left: ${({ theme }) => theme.spacing.md};
+  border-left: 3px solid ${({ theme }) => theme.colors.accent};
+`;
+
+export const TransparencyTitle = styled.p`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
 `;
 
 export const Body = styled.div`
@@ -306,17 +359,19 @@ export const SectionEyebrow = styled.p`
 export const SectionTitle = styled.h2`
   margin: 0;
   color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.xl};
-  line-height: ${({ theme }) => theme.typography.lineHeights.titleMd};
+  font-size: ${({ theme }) => theme.typography.sizes.titleLg};
+  line-height: ${({ theme }) => theme.typography.lineHeights.titleLg};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    font-size: ${({ theme }) => theme.fontSizes.lg};
+    font-size: ${({ theme }) => theme.typography.sizes.titleMd};
+    line-height: ${({ theme }) => theme.typography.lineHeights.titleMd};
   }
 `;
 
 export const SectionText = styled.p`
   margin: ${({ theme }) => theme.spacing.md} 0 0;
   color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: ${({ theme }) => theme.typography.sizes.body};
   line-height: ${({ theme }) => theme.typography.lineHeights.body};
 `;
 
@@ -324,7 +379,8 @@ export const RichText = styled.div`
   max-width: ${({ theme }) => theme.layout.readable};
   margin-top: ${({ theme }) => theme.spacing.lg};
   color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.75;
+  font-size: ${({ theme }) => theme.typography.sizes.body};
+  line-height: ${({ theme }) => theme.typography.lineHeights.body};
 
   p {
     margin: 0 0 ${({ theme }) => theme.spacing.md};
@@ -422,12 +478,28 @@ export const MethodologyCard = styled.article`
   background: ${({ theme }) => theme.colors.surface};
   border-top: 3px solid ${({ theme }) => theme.colors.highlight};
   border-radius: ${({ theme }) => theme.radius.md};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
+`;
+
+export const MethodologyIcon = styled.span`
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  color: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.surfaceAlt};
+  border: 1px solid ${({ theme }) => theme.colors.borderColor.default};
+  border-radius: ${({ theme }) => theme.radius.pill};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
 `;
 
 export const MethodologyTitle = styled.h3`
   margin: 0;
   color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.md};
+  font-size: ${({ theme }) => theme.fontSizes.lg};
+  line-height: ${({ theme }) => theme.typography.lineHeights.titleSm};
 `;
 
 export const MethodologyText = styled.p`
@@ -437,27 +509,42 @@ export const MethodologyText = styled.p`
   line-height: 1.55;
 `;
 
+export const MethodologyNote = styled.p`
+  max-width: ${({ theme }) => theme.layout.readable};
+  margin: ${({ theme }) => theme.spacing.lg} 0 0;
+  padding: ${({ theme }) => theme.spacing.lg};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  font-size: ${({ theme }) => theme.typography.sizes.body};
+  line-height: ${({ theme }) => theme.typography.lineHeights.body};
+`;
+
 export const FaqList = styled.div`
   display: grid;
-  gap: ${({ theme }) => theme.spacing.md};
+  gap: ${({ theme }) => theme.spacing.lg};
   max-width: ${({ theme }) => theme.layout.readable};
 `;
 
 export const FaqItem = styled.details`
-  padding: ${({ theme }) => theme.spacing.lg} 0;
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
-
-  &:last-child {
-    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  }
+  padding: ${({ theme }) => theme.spacing.lg};
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
 `;
 
 export const FaqQuestion = styled.summary`
   cursor: pointer;
   color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.lg};
+  font-size: ${({ theme }) => theme.typography.sizes.titleSm};
   font-weight: ${({ theme }) => theme.fontWeights.semibold};
   line-height: 1.35;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    font-size: ${({ theme }) => theme.fontSizes.lg};
+  }
 `;
 
 export const FaqAnswer = styled.div`
@@ -483,6 +570,7 @@ export const SidebarBox = styled.div`
   padding: ${({ theme }) => theme.spacing.md};
   background: ${({ theme }) => theme.colors.surface};
   border-radius: ${({ theme }) => theme.radius.md};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
 `;
 
 export const SidebarLabel = styled.p`
@@ -498,14 +586,9 @@ export const SidebarBestMedia = styled.div`
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.surfaceAlt};
+  background: ${({ theme }) => theme.colors.surface};
   border-radius: ${({ theme }) => theme.radius.sm};
-`;
-
-export const SidebarBestImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  box-shadow: inset 0 0 0 1px ${({ theme }) => theme.colors.borderColor.default};
 `;
 
 export const SidebarProduct = styled.p`

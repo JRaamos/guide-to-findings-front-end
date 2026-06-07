@@ -4,6 +4,16 @@ import { formatCurrency } from '@/utils/formatCurrency';
 import { getImageAlt } from '@/utils/getImageAlt';
 import { getProductImageFallback, getProductImageUrl } from '@/utils/productMedia';
 
+function getCtaText(value) {
+  const text = typeof value === 'string' ? value.trim() : '';
+
+  if (!text || /ver oferta|mercado livre/i.test(text)) {
+    return 'Ver oferta no Mercado Livre';
+  }
+
+  return text;
+}
+
 export function useController(item, page) {
   const product = item?.product || {};
   const affiliateLink = item?.affiliateLink || {};
@@ -16,7 +26,9 @@ export function useController(item, page) {
   const oldPrice = formatCurrency(product.oldPrice, product.currency || 'BRL');
   const rating = product.rating === null || product.rating === undefined ? '' : `${product.rating}`;
   const reviewCount =
-    product.reviewCount === null || product.reviewCount === undefined ? '' : `${product.reviewCount}`;
+    product.reviewCount === null || product.reviewCount === undefined
+      ? ''
+      : new Intl.NumberFormat('pt-BR').format(product.reviewCount);
   const availabilityLabels = {
     inStock: 'Disponível',
     outOfStock: 'Indisponível',
@@ -31,7 +43,7 @@ export function useController(item, page) {
   const mainCon = cons[0] || '';
   const sourcePageUrl = page?.category?.slug && page?.slug ? `/${page.category.slug}/${page.slug}` : '';
   const recommendationLabels = {
-    1: 'Melhor escolha',
+    1: 'Recomendação da equipe',
     2: 'Custo-benefício',
     3: 'Alternativa forte',
   };
@@ -66,6 +78,9 @@ export function useController(item, page) {
   return {
     position: item?.position || '-',
     title,
+    productId: product.id,
+    productName: product.name || title,
+    rankingPosition: item?.position || '',
     brand: product.brand || '',
     availability,
     availabilityVariant,
@@ -86,7 +101,7 @@ export function useController(item, page) {
     highlight: item?.highlight || '',
     recommendationLabel,
     marketplaceName,
-    ctaText: item?.ctaText || 'Ver oferta',
+    ctaText: getCtaText(item?.ctaText),
     affiliateUrl,
     hasAffiliateUrl: Boolean(affiliateUrl),
     handleCtaClick,

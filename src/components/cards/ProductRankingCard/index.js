@@ -2,6 +2,7 @@
 
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { ProductImageMedia } from '@/components/ui/ProductImageMedia';
 
 import { useController } from './useController';
 import * as S from './styles';
@@ -10,6 +11,9 @@ export function ProductRankingCard({ item, page }) {
   const {
     position,
     title,
+    productId,
+    productName,
+    rankingPosition,
     brand,
     availability,
     availabilityVariant,
@@ -33,14 +37,14 @@ export function ProductRankingCard({ item, page }) {
     <S.Card as="article" variant="default">
       <S.MediaArea>
         <S.RankBadge>#{position}</S.RankBadge>
-        {imageUrl ? (
-          <S.ProductImage src={imageUrl} alt={imageAlt} loading="lazy" />
-        ) : (
-          <S.ImageFallback aria-label={`Imagem indisponível para ${title}`}>
-            <S.ImageFallbackMark>{imageFallback.initials}</S.ImageFallbackMark>
-            <S.ImageFallbackText>{imageFallback.label}</S.ImageFallbackText>
-          </S.ImageFallback>
-        )}
+        <ProductImageMedia
+          imageUrl={imageUrl}
+          alt={imageAlt}
+          fallback={imageFallback}
+          productId={productId}
+          productName={productName}
+          rankingPosition={rankingPosition}
+        />
       </S.MediaArea>
 
       <S.Content>

@@ -1,6 +1,7 @@
 import { env } from '@/config/env';
 
 const affiliateClickEventName = 'affiliate_click';
+const productImageOpenEventName = 'product_image_open';
 
 function canTrack() {
   return Boolean(env.gaMeasurementId && typeof window !== 'undefined');
@@ -61,8 +62,17 @@ export function trackAffiliateClick(payload = {}) {
   });
 }
 
+export function trackProductImageOpen(payload = {}) {
+  trackEvent(productImageOpenEventName, {
+    product_id: normalizeValue(payload.productId || payload.product_id),
+    product_name: normalizeValue(payload.productName || payload.product_name),
+    ranking_position: normalizeValue(payload.rankingPosition || payload.ranking_position),
+  });
+}
+
 export const googleAnalyticsService = {
   trackPageView,
   trackEvent,
   trackAffiliateClick,
+  trackProductImageOpen,
 };
