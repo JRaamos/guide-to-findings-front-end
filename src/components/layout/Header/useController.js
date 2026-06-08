@@ -5,7 +5,8 @@ import { BRAND } from '@/constants/brand';
 export function useController() {
   const navigationItems = [
     { label: 'Início', href: routes.home },
-    { label: 'Buscar', href: routes.search },
+    { label: 'Rankings', href: '/#rankings' },
+    { label: 'Categorias', href: '/#categorias' },
   ];
 
   return {

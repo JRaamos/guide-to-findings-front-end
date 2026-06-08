@@ -8,8 +8,8 @@ const badgeVariants = {
   `,
   primary: ({ theme }) => `
     color: ${theme.colors.brand.primary};
-    background: ${theme.colors.page.surface};
-    border-color: ${theme.colors.brand.primary};
+    background: rgba(42, 111, 86, 0.1);
+    border-color: rgba(42, 111, 86, 0.12);
   `,
   success: ({ theme }) => `
     color: ${theme.colors.state.success};
@@ -33,11 +33,11 @@ export const Badge = styled.span`
   align-items: center;
   width: fit-content;
   min-height: ${({ theme }) => theme.sizes.control.sm};
-  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
   border: 1px solid;
   border-radius: ${({ theme }) => theme.radii.pill};
   font-size: ${({ theme }) => theme.typography.sizes.bodySmall};
-  font-weight: ${({ theme }) => theme.typography.weights.semibold};
+  font-weight: ${({ theme }) => theme.typography.weights.bold};
   line-height: ${({ theme }) => theme.typography.lineHeights.bodySmall};
   ${({ theme, $variant = 'neutral' }) => (badgeVariants[$variant] || badgeVariants.neutral)({ theme })}
 `;

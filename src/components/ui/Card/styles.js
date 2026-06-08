@@ -37,6 +37,6 @@ export const Card = styled.div`
   width: 100%;
   padding: ${({ theme }) => theme.spacing.lg};
   border: 1px solid;
-  border-radius: ${({ theme }) => theme.radii.md};
+  border-radius: ${({ theme }) => theme.radii.lg};
   ${({ theme, $variant = 'default' }) => (cardVariants[$variant] || cardVariants.default)({ theme })}
 `;

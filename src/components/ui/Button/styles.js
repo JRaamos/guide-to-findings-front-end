@@ -9,13 +9,13 @@ const buttonHeights = {
 const buttonPadding = {
   sm: ({ theme }) => `${theme.spacing.xs} ${theme.spacing.md}`,
   md: ({ theme }) => `${theme.spacing.sm} ${theme.spacing.lg}`,
-  lg: ({ theme }) => `${theme.spacing.md} ${theme.spacing.xl}`,
+  lg: ({ theme }) => `${theme.spacing.sm} ${theme.spacing.xl}`,
 };
 
 const buttonFontSize = {
   sm: ({ theme }) => theme.typography.sizes.bodySmall,
-  md: ({ theme }) => theme.typography.sizes.body,
-  lg: ({ theme }) => theme.typography.sizes.bodyLarge,
+  md: ({ theme }) => theme.typography.sizes.bodySmall,
+  lg: ({ theme }) => theme.typography.sizes.bodySmall,
 };
 
 const buttonVariants = {
@@ -41,12 +41,12 @@ const buttonVariants = {
   `,
   ghost: ({ theme }) => `
     color: ${theme.colors.text.primary};
-    background: transparent;
+    background: ${theme.colors.page.surface};
     border-color: ${theme.colors.borderColor.default};
 
     &:hover:not(:disabled, [aria-disabled='true']) {
       color: ${theme.colors.brand.primary};
-      background: ${theme.colors.page.surfaceAlt};
+      background: ${theme.colors.page.surface};
       border-color: ${theme.colors.borderColor.strong};
     }
   `,
@@ -74,9 +74,9 @@ export const buttonStyles = ({ theme, $variant = 'primary', $size = 'md', $fullW
   min-height: ${(buttonHeights[$size] || buttonHeights.md)({ theme })};
   padding: ${(buttonPadding[$size] || buttonPadding.md)({ theme })};
   border: 1px solid transparent;
-  border-radius: ${theme.radii.md};
+  border-radius: ${theme.radii.lg};
   font-size: ${(buttonFontSize[$size] || buttonFontSize.md)({ theme })};
-  font-weight: ${theme.typography.weights.semibold};
+  font-weight: ${theme.typography.weights.bold};
   line-height: 1;
   text-align: center;
   text-decoration: none;
@@ -85,12 +85,15 @@ export const buttonStyles = ({ theme, $variant = 'primary', $size = 'md', $fullW
     background ${theme.transitions.default},
     border-color ${theme.transitions.default},
     color ${theme.transitions.default},
+    box-shadow ${theme.transitions.default},
     transform ${theme.transitions.default};
+  box-shadow: ${$variant === 'primary' || $variant === 'secondary' ? theme.shadows.sm : theme.shadows.none};
 
   ${(buttonVariants[$variant] || buttonVariants.primary)({ theme })}
 
   &:hover:not(:disabled, [aria-disabled='true']) {
     transform: ${$variant === 'link' ? 'none' : 'translateY(-1px)'};
+    box-shadow: ${$variant === 'link' ? theme.shadows.none : theme.shadows.md};
   }
 
   &:disabled,

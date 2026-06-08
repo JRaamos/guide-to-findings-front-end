@@ -4,9 +4,9 @@ import { routes } from '@/config/routes';
 
 export function useController() {
   const institutionalLinks = [
-    { label: 'Sobre', href: routes.about },
-    { label: 'Política de privacidade', href: '/privacidade' },
     { label: 'Termos de uso', href: '/termos' },
+    { label: 'Privacidade', href: '/privacidade' },
+    { label: 'Aviso de afiliação', href: routes.about },
   ];
 
   return {
@@ -14,6 +14,8 @@ export function useController() {
     slogan: BRAND.slogan,
     categoryItems: categoryPlaceholders,
     institutionalLinks,
-    affiliateNotice: 'Podemos receber comissão por compras realizadas por links afiliados.',
+    affiliateNotice:
+      'Pesquisamos, comparamos e organizamos rankings para ajudar você a tomar decisões de compra mais inteligentes - sem perder tempo.',
+    editorialNotice: 'Editorial independente · Transparência afiliada',
   };
 }

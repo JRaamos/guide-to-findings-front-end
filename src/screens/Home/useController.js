@@ -4,24 +4,24 @@ const heroSignals = ['Comparação editorial', 'Rankings prontos para decisão',
 
 const processSteps = [
   {
-    number: '1',
-    title: 'Buscamos produtos',
-    text: 'Partimos de categorias com intenção real de compra.',
+    icon: '↧',
+    title: 'Comparação objetiva',
+    text: 'Criamos critérios e dados reais de produtos.',
   },
   {
-    number: '2',
-    title: 'Comparamos informações',
-    text: 'Organizamos preço, avaliações, disponibilidade e contexto de uso.',
+    icon: '◎',
+    title: 'Editorial independente',
+    text: 'Sem parcerias pagas influenciando posições.',
   },
   {
-    number: '3',
-    title: 'Criamos recomendações',
-    text: 'Separamos melhor geral, custo-benefício e alternativas relevantes.',
+    icon: '↻',
+    title: 'Atualizado sempre',
+    text: 'Revisões constantes conforme novas opções chegam.',
   },
   {
-    number: '4',
-    title: 'Você escolhe melhor',
-    text: 'A decisão fica mais clara, rápida e segura.',
+    icon: '➜',
+    title: 'Decisão rápida',
+    text: 'Menos guias, melhor custo-benefício, alternativa.',
   },
 ];
 
@@ -74,6 +74,7 @@ function buildFeaturedRankings(pages) {
     excerpt: page.excerpt || 'Veja uma seleção organizada para comparar opções antes de comprar.',
     url: getPageUrl(page),
     itemCount: getRankingItemCount(page),
+    items: Array.isArray(page?.ranking?.items) ? page.ranking.items.slice(0, 3) : [],
   }));
 }
 
@@ -84,21 +85,32 @@ function buildCategoryCards(categories) {
     description: category.description || 'Rankings, guias e comparativos em curadoria.',
     url: getCategoryUrl(category),
     pageCount: category.pageCount || 0,
+    icon: (category.name || 'Categoria').slice(0, 1).toUpperCase(),
   }));
 }
 
 export function useController({ categories = [], featuredPages = [] } = {}) {
   const featuredRankings = buildFeaturedRankings(featuredPages);
   const categoryCards = buildCategoryCards(categories);
+  const primaryRanking = featuredRankings[0] || null;
   const primaryRankingUrl = featuredRankings[0]?.url || '/construcao/top-10-serras-marmore';
   const primaryCategoryUrl = categoryCards[0]?.url || '/construcao';
+  const totalProducts = featuredRankings.reduce((total, ranking) => total + ranking.itemCount, 0);
+  const stats = [
+    { value: totalProducts || '0', label: 'Produtos analisados' },
+    { value: featuredRankings.length || '0', label: 'Guias publicados' },
+    { value: categoryCards.length || '0', label: 'Categorias' },
+  ];
 
   return {
     brandName: BRAND.name,
-    title: 'Encontre os melhores produtos sem perder tempo pesquisando.',
+    titleStart: 'Encontre o melhor produto',
+    titleAccent: 'sem pesquisar horas.',
     description:
-      'Comparamos opções, analisamos avaliações e organizamos rankings para ajudar você a escolher melhor.',
+      'Comparamos opções, analisamos avaliações e organizamos rankings prontos para decisão. Você escolhe com confiança.',
     heroSignals,
+    stats,
+    primaryRanking,
     primaryRankingUrl,
     primaryCategoryUrl,
     featuredRankings,

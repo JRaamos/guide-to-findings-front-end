@@ -20,8 +20,8 @@ export const GlobalStyles = createGlobalStyle`
     margin: 0;
     background: ${({ theme }) => theme.colors.background};
     color: ${({ theme }) => theme.colors.textPrimary};
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-size: ${({ theme }) => theme.fontSizes.md};
+    font-family: ${({ theme }) => theme.typography.fontFamily};
+    font-size: ${({ theme }) => theme.typography.sizes.bodySmall};
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -47,7 +47,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   :focus-visible {
-    outline: 3px solid ${({ theme }) => theme.colors.focus};
+    outline: 2px solid ${({ theme }) => theme.colors.focus};
     outline-offset: 3px;
   }
 `;
