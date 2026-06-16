@@ -1,6 +1,7 @@
 'use client';
 
 import { ProductRankingCard } from '@/components/cards/ProductRankingCard';
+import { PageCard } from '@/components/cards/PageCard';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { ProductImageMedia } from '@/components/ui/ProductImageMedia';
@@ -28,6 +29,7 @@ export function RankingTemplate({ page }) {
     rankingTitle,
     rankingDescription,
     rankingItems,
+    relatedPages,
     faqs,
     methodologyCards,
     methodologyText,
@@ -225,6 +227,20 @@ export function RankingTemplate({ page }) {
               </S.MethodologyGrid>
               {methodologyText ? <S.MethodologyNote>{methodologyText}</S.MethodologyNote> : null}
             </S.Section>
+
+            {relatedPages.length > 0 ? (
+              <S.Section id="veja-tambem">
+                <S.SectionHeader>
+                  <S.SectionEyebrow>Veja também</S.SectionEyebrow>
+                  <S.SectionTitle>Outros guias relacionados</S.SectionTitle>
+                </S.SectionHeader>
+                <S.RelatedPagesList>
+                  {relatedPages.map((relatedPage) => (
+                    <PageCard key={relatedPage.pageId || relatedPage.id} page={relatedPage} />
+                  ))}
+                </S.RelatedPagesList>
+              </S.Section>
+            ) : null}
 
             {faqs.length > 0 ? (
               <S.Section id="faq">

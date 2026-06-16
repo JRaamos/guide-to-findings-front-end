@@ -318,6 +318,7 @@ export function useController(page) {
   const ranking = page?.ranking || {};
   const rankingItems = Array.isArray(ranking.items) ? ranking.items : [];
   const faqs = Array.isArray(page?.faqs) ? page.faqs : [];
+  const relatedPages = Array.isArray(page?.relatedPages) ? page.relatedPages : [];
   const semanticIntro = splitSemanticIntro(page?.intro || '');
   const explicitTopPicks = Array.isArray(page?.topPicks) ? page.topPicks : [];
   const explicitSemanticTopPicks = buildSemanticTopPicks(rankingItems, explicitTopPicks);
@@ -386,6 +387,7 @@ export function useController(page) {
     rankingTitle: ranking.title || '',
     rankingDescription: ranking.description || '',
     rankingItems,
+    relatedPages,
     faqs,
     schemaJson: buildSchemaJson(page?.seo?.schemaData),
     trackAffiliateClick,

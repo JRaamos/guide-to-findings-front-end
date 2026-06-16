@@ -558,6 +558,12 @@ export const MethodologyNote = styled.p`
   line-height: ${({ theme }) => theme.typography.lineHeights.body};
 `;
 
+export const RelatedPagesList = styled.div`
+  display: grid;
+  max-width: ${({ theme }) => theme.layout.readable};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+`;
+
 export const FaqList = styled.div`
   display: grid;
   gap: ${({ theme }) => theme.spacing.md};
