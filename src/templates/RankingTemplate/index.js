@@ -23,7 +23,6 @@ export function RankingTemplate({ page }) {
     primaryAffiliateUrl,
     primaryCtaText,
     totalItems,
-    trustItems,
     topHighlights,
     comparisonRows,
     rankingTitle,
@@ -31,8 +30,6 @@ export function RankingTemplate({ page }) {
     rankingItems,
     relatedPages,
     faqs,
-    methodologyCards,
-    methodologyText,
     schemaJson,
     trackAffiliateClick,
   } = useController(page);
@@ -125,21 +122,6 @@ export function RankingTemplate({ page }) {
         ) : null}
       </S.Hero>
 
-      <S.TrustLayer aria-label="Sinais de confiança editorial">
-        <S.TrustBar>
-          {trustItems.map((item) => (
-            <S.TrustItem key={item}>{item}</S.TrustItem>
-          ))}
-        </S.TrustBar>
-        <S.EditorialTransparency>
-          <S.TransparencyTitle>Como ganhamos dinheiro</S.TransparencyTitle>
-          <S.TransparencyText>
-            Alguns links desta página são afiliados. Isso não influencia nossa classificação; nosso
-            objetivo é recomendar os melhores produtos para cada perfil.
-          </S.TransparencyText>
-        </S.EditorialTransparency>
-      </S.TrustLayer>
-
       <S.Body>
         <S.ContentGrid>
           <S.MainColumn>
@@ -213,34 +195,61 @@ export function RankingTemplate({ page }) {
 
             <S.Section id="metodologia">
               <S.SectionHeader>
-                <S.SectionEyebrow>Como avaliamos</S.SectionEyebrow>
-                <S.SectionTitle>O que pesou na seleção</S.SectionTitle>
+                <S.SectionEyebrow>Confiança editorial</S.SectionEyebrow>
+                <S.SectionTitle>Como este ranking foi elaborado</S.SectionTitle>
               </S.SectionHeader>
-              <S.MethodologyGrid>
-                {methodologyCards.map((card) => (
-                  <S.MethodologyCard key={card.title}>
-                    <S.MethodologyIcon aria-hidden="true">{card.icon}</S.MethodologyIcon>
-                    <S.MethodologyTitle>{card.title}</S.MethodologyTitle>
-                    <S.MethodologyText>{card.text}</S.MethodologyText>
-                  </S.MethodologyCard>
-                ))}
-              </S.MethodologyGrid>
-              {methodologyText ? <S.MethodologyNote>{methodologyText}</S.MethodologyNote> : null}
-            </S.Section>
+              <S.TrustContent>
+                <S.TrustBlock>
+                  <S.TrustBlockTitle>Como avaliamos os produtos</S.TrustBlockTitle>
+                  <S.TrustText>
+                    Os produtos exibidos neste ranking foram selecionados com base em dados públicos
+                    de mercado, relevância, avaliações disponíveis e critérios editoriais.
+                  </S.TrustText>
+                  <S.TrustText>
+                    Nossa equipe revisa automaticamente os rankings e organiza os produtos para
+                    facilitar a comparação entre opções semelhantes.
+                  </S.TrustText>
+                  <S.TrustText>
+                    Os dados podem ser atualizados periodicamente para refletir mudanças de mercado,
+                    disponibilidade e desempenho dos produtos.
+                  </S.TrustText>
+                </S.TrustBlock>
 
-            {relatedPages.length > 0 ? (
-              <S.Section id="veja-tambem">
-                <S.SectionHeader>
-                  <S.SectionEyebrow>Veja também</S.SectionEyebrow>
-                  <S.SectionTitle>Outros guias relacionados</S.SectionTitle>
-                </S.SectionHeader>
-                <S.RelatedPagesList>
-                  {relatedPages.map((relatedPage) => (
-                    <PageCard key={relatedPage.pageId || relatedPage.id} page={relatedPage} />
-                  ))}
-                </S.RelatedPagesList>
-              </S.Section>
-            ) : null}
+                <S.TrustBlock>
+                  <S.TrustBlockTitle>Critérios de avaliação</S.TrustBlockTitle>
+                  <S.CriteriaList>
+                    <li>Popularidade</li>
+                    <li>Relevância</li>
+                    <li>Disponibilidade</li>
+                    <li>Avaliações disponíveis</li>
+                    <li>Custo-benefício</li>
+                  </S.CriteriaList>
+                </S.TrustBlock>
+
+                <S.TrustBlock>
+                  <S.TrustBlockTitle>Fonte dos dados</S.TrustBlockTitle>
+                  <S.TrustText>
+                    Os produtos apresentados foram identificados a partir de dados públicos e
+                    informações disponíveis em marketplaces e fontes comerciais parceiras.
+                  </S.TrustText>
+                  <S.TrustText>
+                    As informações podem mudar ao longo do tempo conforme atualização dos fabricantes
+                    e vendedores.
+                  </S.TrustText>
+                </S.TrustBlock>
+
+                <S.TrustBlock>
+                  <S.TrustBlockTitle>Como ganhamos dinheiro</S.TrustBlockTitle>
+                  <S.TrustText>Alguns links desta página podem ser links de afiliados.</S.TrustText>
+                  <S.TrustText>
+                    Isso significa que podemos receber uma comissão caso uma compra seja realizada,
+                    sem custo adicional para o usuário.
+                  </S.TrustText>
+                </S.TrustBlock>
+
+                <S.LastUpdated>Última atualização: {updatedLabel}</S.LastUpdated>
+              </S.TrustContent>
+            </S.Section>
 
             {faqs.length > 0 ? (
               <S.Section id="faq">
@@ -258,6 +267,20 @@ export function RankingTemplate({ page }) {
                     </S.FaqItem>
                   ))}
                 </S.FaqList>
+              </S.Section>
+            ) : null}
+
+            {relatedPages.length > 0 ? (
+              <S.Section id="veja-tambem">
+                <S.SectionHeader>
+                  <S.SectionEyebrow>Veja também</S.SectionEyebrow>
+                  <S.SectionTitle>Outros guias relacionados</S.SectionTitle>
+                </S.SectionHeader>
+                <S.RelatedPagesList>
+                  {relatedPages.map((relatedPage) => (
+                    <PageCard key={relatedPage.pageId || relatedPage.id} page={relatedPage} />
+                  ))}
+                </S.RelatedPagesList>
               </S.Section>
             ) : null}
 

@@ -98,14 +98,6 @@ export const Description = styled.p`
   }
 `;
 
-export const TransparencyText = styled.p`
-  max-width: 680px;
-  margin: 0;
-  color: ${({ theme }) => theme.colors.textMuted};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  line-height: 1.6;
-`;
-
 export const TopPicks = styled.div`
   position: relative;
   display: grid;
@@ -275,71 +267,6 @@ export const TopPickAction = styled.div`
     justify-self: stretch;
     min-width: 0;
   }
-`;
-
-export const TrustLayer = styled.section`
-  display: none;
-`;
-
-export const TrustBar = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: ${({ theme }) => theme.spacing.sm};
-  padding: ${({ theme }) => theme.spacing.md};
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
-  box-shadow: ${({ theme }) => theme.shadows.sm};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-export const TrustItem = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
-  min-width: 0;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.semibold};
-  line-height: 1.45;
-
-  &::before {
-    content: '✓';
-    display: inline-grid;
-    flex: 0 0 auto;
-    place-items: center;
-    width: 22px;
-    height: 22px;
-    color: ${({ theme }) => theme.colors.primary};
-    background: ${({ theme }) => theme.colors.surfaceAlt};
-    border: 1px solid ${({ theme }) => theme.colors.borderColor.default};
-    border-radius: ${({ theme }) => theme.radius.pill};
-    font-size: ${({ theme }) => theme.fontSizes.xs};
-    font-weight: ${({ theme }) => theme.fontWeights.bold};
-  }
-`;
-
-export const EditorialTransparency = styled.div`
-  display: grid;
-  gap: ${({ theme }) => theme.spacing.xs};
-  max-width: ${({ theme }) => theme.layout.readable};
-  margin-top: ${({ theme }) => theme.spacing.md};
-  padding-left: ${({ theme }) => theme.spacing.md};
-  border-left: 3px solid ${({ theme }) => theme.colors.accent};
-`;
-
-export const TransparencyTitle = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
 `;
 
 export const Body = styled.div`
@@ -556,6 +483,49 @@ export const MethodologyNote = styled.p`
   border-radius: ${({ theme }) => theme.radius.md};
   font-size: ${({ theme }) => theme.typography.sizes.body};
   line-height: ${({ theme }) => theme.typography.lineHeights.body};
+`;
+
+export const TrustContent = styled.div`
+  display: grid;
+  gap: ${({ theme }) => theme.spacing.lg};
+  max-width: ${({ theme }) => theme.layout.readable};
+`;
+
+export const TrustBlock = styled.div`
+  display: grid;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
+export const TrustBlockTitle = styled.h3`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  font-size: ${({ theme }) => theme.fontSizes.md};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  line-height: 1.35;
+`;
+
+export const TrustText = styled.p`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: ${({ theme }) => theme.typography.sizes.body};
+  line-height: ${({ theme }) => theme.typography.lineHeights.body};
+`;
+
+export const CriteriaList = styled.ul`
+  display: grid;
+  gap: ${({ theme }) => theme.spacing.xs};
+  margin: 0;
+  padding-left: ${({ theme }) => theme.spacing.lg};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: ${({ theme }) => theme.typography.sizes.body};
+  line-height: ${({ theme }) => theme.typography.lineHeights.body};
+`;
+
+export const LastUpdated = styled.p`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
 `;
 
 export const RelatedPagesList = styled.div`

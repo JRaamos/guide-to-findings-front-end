@@ -288,15 +288,6 @@ function buildMethodologyCards(methodology) {
   ];
 }
 
-function buildTrustItems(totalItems) {
-  return [
-    totalItems > 0 ? `${totalItems} produtos avaliados` : 'Produtos avaliados',
-    'Comparação editorial',
-    'Avaliações analisadas',
-    'Preços monitorados',
-  ];
-}
-
 function buildComparisonRow(item) {
   const product = getProduct(item);
   const affiliateLink = getAffiliateLink(item);
@@ -328,8 +319,14 @@ export function useController(page) {
   const primaryItem = rankingItems[0] || null;
   const primaryAffiliateUrl = getAffiliateLink(primaryItem)?.affiliateUrl || '';
   const sourcePageUrl = buildSourcePageUrl(page);
-  const updatedAt = page?.publishedAt || page?.approvedAt || '';
-  const updatedSource = page?.publishedAt ? 'publishedAt' : page?.approvedAt ? 'approvedAt' : 'fallback';
+  const updatedAt = page?.updatedAt || page?.publishedAt || page?.approvedAt || '';
+  const updatedSource = page?.updatedAt
+    ? 'updatedAt'
+    : page?.publishedAt
+      ? 'publishedAt'
+      : page?.approvedAt
+        ? 'approvedAt'
+        : 'fallback';
   const updatedLabel = updatedAt ? formatDate(updatedAt) : 'Atualização editorial não informada';
   const categoryName = page?.category?.name || '';
   const topHighlights = buildTopHighlights(rankingItems, semanticTopPicks);
@@ -379,7 +376,6 @@ export function useController(page) {
     primaryAffiliateUrl,
     primaryCtaText: getCtaText(primaryItem?.ctaText),
     totalItems: rankingItems.length,
-    trustItems: buildTrustItems(rankingItems.length),
     topHighlights,
     methodologyCards: buildMethodologyCards(methodology),
     methodologyText: methodology,
