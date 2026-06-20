@@ -10,6 +10,14 @@ const semanticSectionLabels = {
   comparison: ['comparativo rapido', 'comparativo rápido', 'comparacao rapida', 'comparação rápida'],
   methodology: ['como avaliamos'],
 };
+const rankingCriteriaByIntent = {
+  best: 'Nesta seleção, priorizamos produtos populares, bem posicionados no marketplace, disponíveis e com informações suficientes para comparação.',
+  costBenefit: 'Nesta seleção de custo-benefício, priorizamos produtos com preço competitivo, sinais de desconto, boa avaliação e equilíbrio entre recursos e valor.',
+  comparison: 'Nesta seleção comparativa, priorizamos variedade entre marcas, modelos e características para facilitar a comparação entre alternativas.',
+  buyingGuide: 'Neste guia, organizamos os produtos para ajudar na escolha, destacando critérios práticos como uso, recursos, preço e disponibilidade.',
+  useCase: 'Nesta seleção, priorizamos produtos mais adequados ao uso indicado, considerando características relevantes para esse perfil.',
+  gamer: 'Nesta seleção gamer, priorizamos produtos com sinais de desempenho, como placa de vídeo dedicada, memória RAM, processador e características voltadas para jogos.',
+};
 
 function normalizeText(value) {
   return typeof value === 'string' ? value.trim() : '';
@@ -20,6 +28,25 @@ function normalizeMatch(value) {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
+}
+
+function getRankingCriteria(page, ranking) {
+  const editorialIntent = normalizeText(page?.editorialIntent || ranking?.editorialIntent);
+  const editorialKey = normalizeMatch(page?.editorialKey || ranking?.editorialKey);
+  const keywordContext = normalizeMatch(
+    `${page?.title || ''} ${page?.slug || ''} ${ranking?.title || ''}`
+  );
+  const isGamer =
+    editorialIntent === 'gamer' ||
+    editorialKey.includes(':gamer') ||
+    (editorialIntent === 'useCase' && editorialKey.includes('gamer')) ||
+    /\bgamer\b/.test(keywordContext);
+
+  if (isGamer) {
+    return rankingCriteriaByIntent.gamer;
+  }
+
+  return rankingCriteriaByIntent[editorialIntent] || rankingCriteriaByIntent.best;
 }
 
 function getSectionKey(line) {
@@ -332,6 +359,7 @@ export function useController(page) {
   const topHighlights = buildTopHighlights(rankingItems, semanticTopPicks);
   const comparison = page?.comparison || semanticIntro.comparison || '';
   const methodology = page?.methodology || semanticIntro.methodology || '';
+  const rankingCriteria = getRankingCriteria(page, ranking);
 
   function trackAffiliateClick(item) {
     const product = getProduct(item);
@@ -382,6 +410,7 @@ export function useController(page) {
     comparisonRows: rankingItems.map(buildComparisonRow),
     rankingTitle: ranking.title || '',
     rankingDescription: ranking.description || '',
+    rankingCriteria,
     rankingItems,
     relatedPages,
     faqs,

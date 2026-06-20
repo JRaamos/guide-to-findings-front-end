@@ -27,6 +27,7 @@ export function RankingTemplate({ page }) {
     comparisonRows,
     rankingTitle,
     rankingDescription,
+    rankingCriteria,
     rankingItems,
     relatedPages,
     faqs,
@@ -123,6 +124,13 @@ export function RankingTemplate({ page }) {
       </S.Hero>
 
       <S.Body>
+        <S.OrderingNote aria-labelledby="ranking-ordering-title">
+          <S.OrderingNoteTitle id="ranking-ordering-title">
+            Como ordenamos este ranking
+          </S.OrderingNoteTitle>
+          <S.OrderingNoteText>{rankingCriteria}</S.OrderingNoteText>
+        </S.OrderingNote>
+
         <S.ContentGrid>
           <S.MainColumn>
             <S.Section id="ranking">

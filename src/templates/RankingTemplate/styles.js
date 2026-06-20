@@ -281,6 +281,39 @@ export const Body = styled.div`
   }
 `;
 
+export const OrderingNote = styled.aside`
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+  gap: ${({ theme }) => theme.spacing.lg};
+  align-items: start;
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
+  padding: ${({ theme }) => theme.spacing.lg};
+  background: ${({ theme }) => theme.colors.surfaceStrong};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+    gap: ${({ theme }) => theme.spacing.sm};
+  }
+`;
+
+export const OrderingNoteTitle = styled.h2`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  line-height: 1.4;
+`;
+
+export const OrderingNoteText = styled.p`
+  max-width: ${({ theme }) => theme.layout.readable};
+  margin: 0;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  line-height: 1.6;
+`;
+
 export const ContentGrid = styled.div`
   display: grid;
   grid-template-columns: minmax(0, 1fr) 220px;
