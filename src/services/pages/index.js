@@ -6,7 +6,7 @@ function isValidSlug(slug) {
   return typeof slug === 'string' && slugPattern.test(slug);
 }
 
-export async function getPageBySlugs(categorySlug, contentSlug) {
+export async function getPageBySlugs(categorySlug, contentSlug, options = {}) {
   if (!isValidSlug(categorySlug) || !isValidSlug(contentSlug)) {
     return null;
   }
@@ -14,7 +14,14 @@ export async function getPageBySlugs(categorySlug, contentSlug) {
   const safeCategorySlug = encodeURIComponent(categorySlug);
   const safeContentSlug = encodeURIComponent(contentSlug);
 
-  return apiClient.get(`/api/public/pages/${safeCategorySlug}/${safeContentSlug}`);
+  return apiClient.get(`/api/public/pages/${safeCategorySlug}/${safeContentSlug}`, {
+    ...options,
+    tags: [
+      `page:${categorySlug}:${contentSlug}`,
+      'pages',
+      ...(Array.isArray(options.tags) ? options.tags : []),
+    ],
+  });
 }
 
 export const pageService = {

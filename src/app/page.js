@@ -46,7 +46,7 @@ async function getHomeData() {
   try {
     const [categories, sitemap] = await Promise.all([
       categoryService.getCategories().catch(() => []),
-      sitemapService.getSitemap().catch(() => []),
+      sitemapService.getSitemap({ tags: ['homepage'] }).catch(() => []),
     ]);
 
     const safeCategories = Array.isArray(categories) ? categories : [];
@@ -54,7 +54,9 @@ async function getHomeData() {
 
     const categoryDetails = await Promise.all(
       safeCategories.slice(0, 6).map(async (category) => {
-        const details = await categoryService.getCategoryBySlug(category.slug).catch(() => null);
+        const details = await categoryService
+          .getCategoryBySlug(category.slug, { tags: ['homepage'] })
+          .catch(() => null);
 
         return {
           ...category,
@@ -71,7 +73,9 @@ async function getHomeData() {
     const featuredPages = (
       await Promise.all(
         pageTargets.map((target) =>
-          pageService.getPageBySlugs(target.categorySlug, target.contentSlug).catch(() => null)
+          pageService
+            .getPageBySlugs(target.categorySlug, target.contentSlug, { tags: ['homepage'] })
+            .catch(() => null)
         )
       )
     )

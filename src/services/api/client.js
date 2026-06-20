@@ -8,6 +8,9 @@ export const apiClient = {
   },
 
   async get(path, options = {}) {
+    const tags = Array.isArray(options.tags)
+      ? [...new Set(options.tags.filter((tag) => typeof tag === 'string' && tag.trim()))]
+      : [];
     const response = await fetch(`${this.baseUrl}${path}`, {
       method: 'GET',
       headers: {
@@ -15,6 +18,7 @@ export const apiClient = {
       },
       next: {
         revalidate: options.revalidate ?? 3600,
+        ...(tags.length ? { tags } : {}),
       },
     });
 
