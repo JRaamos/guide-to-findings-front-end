@@ -1,5 +1,8 @@
 export const routes = {
   home: '/',
-  about: '/about',
+  about: '/sobre',
+  contact: '/contato',
+  privacy: '/politica-de-privacidade',
+  terms: '/termos-de-uso',
   search: '/search',
 };

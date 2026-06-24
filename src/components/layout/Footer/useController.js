@@ -1,12 +1,13 @@
 import { categoryPlaceholders } from '@/constants/categories';
 import { BRAND } from '@/constants/brand';
-import { routes } from '@/config/routes';
+import { institutionalPages } from '@/screens/Institutional/content';
 
 export function useController() {
   const institutionalLinks = [
-    { label: 'Termos de uso', href: '/termos' },
-    { label: 'Privacidade', href: '/privacidade' },
-    { label: 'Aviso de afiliação', href: routes.about },
+    { label: 'Sobre', href: institutionalPages.about.slug },
+    { label: 'Contato', href: institutionalPages.contact.slug },
+    { label: 'Privacidade', href: institutionalPages.privacy.slug },
+    { label: 'Termos de uso', href: institutionalPages.terms.slug },
   ];
 
   return {

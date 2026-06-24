@@ -1,5 +1,6 @@
 import { siteConfig } from '@/config/site';
 import { getSitemap } from '@/services/sitemap';
+import { institutionalNavigation } from '@/screens/Institutional/content';
 
 export const revalidate = 3600;
 
@@ -9,11 +10,11 @@ const staticSitemapItems = [
     changeFrequency: 'daily',
     priority: 1,
   },
-  {
-    url: '/about',
+  ...institutionalNavigation.map((item) => ({
+    url: item.href,
     changeFrequency: 'monthly',
     priority: 0.5,
-  },
+  })),
 ];
 
 function toAbsoluteUrl(path) {
